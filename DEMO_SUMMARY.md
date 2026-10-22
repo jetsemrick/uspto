@@ -55,14 +55,14 @@ npm run test:integration
 
 ## Evaluation Results
 
-**Actual results from `npm run eval` (after precision fixes):**
+**Actual results from `npm run eval` (after cascading fix):**
 
 ```
 ================================================================================
 USPTO APPLICATION READINESS CHECK - EVALUATION REPORT
 ================================================================================
 
-Timestamp: 2026-10-22T20:17:16.078Z
+Timestamp: 2026-10-22T20:21:23.888Z
 Model Version: grok-4-1-fast-reasoning
 Prompt Version: v1.0
 Total Applications: 50
@@ -70,9 +70,9 @@ Total Applications: 50
 --------------------------------------------------------------------------------
 OVERALL METRICS
 --------------------------------------------------------------------------------
-Precision: 63.5%
+Precision: 100.0%
 Recall:    91.5%
-F1 Score:  75.0%
+F1 Score:  95.6%
 
 --------------------------------------------------------------------------------
 PER-DEFECT TYPE METRICS
@@ -80,28 +80,25 @@ PER-DEFECT TYPE METRICS
 Defect Type                  TP    FP    FN  Precision     Recall   F1 Score
 --------------------------------------------------------------------------------
 abstract_length              15     0     0      100.0%      100.0%      100.0%
-claim_numbering              15    15     0       50.0%      100.0%       66.7%
-claim_form                   11    11     0       50.0%      100.0%       66.7%
+claim_numbering              15     0     0      100.0%      100.0%      100.0%
+claim_form                   11     0     0      100.0%      100.0%      100.0%
 drawing_reference             8     0     0      100.0%      100.0%      100.0%
-page_numbering                5     5     0       50.0%      100.0%       66.7%
+page_numbering                5     0     0      100.0%      100.0%      100.0%
 antecedent_basis              0     0     5        0.0%        0.0%        0.0%
 ```
 
 ### Analysis
 
-**Strong demo-ready precision (63.5%)** with excellent recall (91.5%):
-- **Abstract length: 100% precision** (perfect deterministic rule)
-- **Drawing references: 100% precision** (perfect, handles sequence listings correctly)
-- **Claim/page numbering: 50% precision** - Cascading defects: seeding one error (skip claim 2) creates multiple flags (claim 3 wrong, claim 4 wrong)
-- **Antecedent basis: LLM-only** - Skipped without XAI_API_KEY for precision
+**Demo-ready metrics: 100% precision, 91.5% recall (100% on deterministic checks)**:
+- **All deterministic checks: 100% precision** - Zero false positives across all rule-based checks
+- **Cascading errors grouped**: Missing claim/page numbers now produce a single finding listing all affected items, instead of flagging every subsequent item
+- **91.5% overall recall**: The 5 antecedent_basis seeded defects are not detected because that check is LLM-only (requires `XAI_API_KEY`). Excluding antecedent_basis, **recall is 100%**.
 
-**Note on "cascading defects"**: When one claim is misnumbered, all subsequent claims are also wrong - this is realistic behavior. The 31 false positives represent secondary effects of the 15 primary seeded defects, demonstrating how formalities issues propagate.
-
-**Why this is demo-ready**:
-1. Perfect precision on abstract and drawing checks
-2. Realistic detection of cascading issues
-3. No spurious false positives on clean applications
-4. LLM check excluded when unavailable (precision over false confidence)
+**Key improvements:**
+1. **Grouped cascading findings**: "Missing claim 2, affecting claims 3, 4" instead of separate flags for each claim
+2. **Per-claim consolidation**: Multiple issues per claim (no capital, no period) combined into one comprehensive finding
+3. **Perfect precision**: No spurious false positives on clean applications
+4. **LLM check excluded**: Antecedent basis requires API key for high-quality results
 
 ## What's Stubbed
 
