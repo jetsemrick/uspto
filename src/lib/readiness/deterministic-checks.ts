@@ -58,6 +58,7 @@ export function checkAbstractLength(app: ParsedApplication): ReadinessFlag[] {
 
 /**
  * Check claim numbering: consecutive Arabic numerals
+ * Groups cascading errors into a single finding
  * 37 CFR 1.126; MPEP 608.01(j)
  */
 export function checkClaimNumbering(app: ParsedApplication): ReadinessFlag[] {
@@ -67,55 +68,74 @@ export function checkClaimNumbering(app: ParsedApplication): ReadinessFlag[] {
     return flags;
   }
 
-  // Check for consecutive numbering
+  const issues: Array<{ expected: number; actual: number; lineNumber?: number }> = [];
+  const invalidNumbers: Array<{ actual: number; lineNumber?: number }> = [];
+
+  // Check for consecutive numbering and valid numerals
   for (let i = 0; i < app.claims.length; i++) {
     const expectedNumber = i + 1;
     const actualNumber = app.claims[i].number;
 
-    if (actualNumber !== expectedNumber) {
-      flags.push(
-        createFlag({
-          type: "claim_numbering",
-          severity: "error",
-          location: {
-            type: "claim",
-            identifier: `claim ${actualNumber}`,
-            lineNumber: app.claims[i].lineNumber,
-          },
-          description: `Claim ${actualNumber} is out of sequence. Expected claim ${expectedNumber}.`,
-          suggestedFix: `Renumber claims consecutively starting from 1.`,
-          citation: {
-            section: "MPEP 608.01(j)",
-            cfr: "37 CFR 1.126",
-            description: "Claims must be numbered consecutively in Arabic numerals",
-          },
-        }),
-      );
+    if (!Number.isInteger(actualNumber) || actualNumber < 1) {
+      invalidNumbers.push({
+        actual: actualNumber,
+        lineNumber: app.claims[i].lineNumber,
+      });
+    } else if (actualNumber !== expectedNumber) {
+      issues.push({
+        expected: expectedNumber,
+        actual: actualNumber,
+        lineNumber: app.claims[i].lineNumber,
+      });
     }
   }
 
-  // Check for non-Arabic numerals (basic check)
-  app.claims.forEach((claim) => {
-    if (claim.number < 1 || !Number.isInteger(claim.number)) {
-      flags.push(
-        createFlag({
-          type: "claim_numbering",
-          severity: "error",
-          location: {
-            type: "claim",
-            identifier: `claim ${claim.number}`,
-            lineNumber: claim.lineNumber,
-          },
-          description: `Invalid claim number: ${claim.number}. Must be a positive Arabic numeral.`,
-          suggestedFix: `Use positive Arabic numerals (1, 2, 3, ...) for claim numbering.`,
-          citation: {
-            section: "MPEP 608.01(j)",
-            cfr: "37 CFR 1.126",
-            description: "Claims must be numbered in Arabic numerals",
-          },
-        }),
-      );
-    }
+  // Create grouped finding for numbering issues
+  if (issues.length > 0) {
+    const firstIssue = issues[0];
+    const affectedClaims = issues.map((iss) => iss.actual);
+    const missingClaim = firstIssue.expected;
+
+    flags.push(
+      createFlag({
+        type: "claim_numbering",
+        severity: "error",
+        location: {
+          type: "claim",
+          identifier: `claim ${firstIssue.actual}`,
+          lineNumber: firstIssue.lineNumber,
+        },
+        description: `Claims are not numbered consecutively. Missing claim ${missingClaim}, affecting claims ${affectedClaims.join(", ")}.`,
+        suggestedFix: `Renumber claims consecutively starting from 1. Insert or correct claim ${missingClaim}.`,
+        citation: {
+          section: "MPEP 608.01(j)",
+          cfr: "37 CFR 1.126",
+          description: "Claims must be numbered consecutively in Arabic numerals",
+        },
+      }),
+    );
+  }
+
+  // Create separate findings for invalid numerals
+  invalidNumbers.forEach((invalid) => {
+    flags.push(
+      createFlag({
+        type: "claim_numbering",
+        severity: "error",
+        location: {
+          type: "claim",
+          identifier: `claim ${invalid.actual}`,
+          lineNumber: invalid.lineNumber,
+        },
+        description: `Invalid claim number: ${invalid.actual}. Must be a positive Arabic numeral.`,
+        suggestedFix: `Use positive Arabic numerals (1, 2, 3, ...) for claim numbering.`,
+        citation: {
+          section: "MPEP 608.01(j)",
+          cfr: "37 CFR 1.126",
+          description: "Claims must be numbered in Arabic numerals",
+        },
+      }),
+    );
   });
 
   return flags;
@@ -123,6 +143,7 @@ export function checkClaimNumbering(app: ParsedApplication): ReadinessFlag[] {
 
 /**
  * Check claim form/punctuation: capital letter, single sentence ending in period
+ * Groups multiple issues per claim into a single finding
  * MPEP 608.01(m)
  */
 export function checkClaimForm(app: ParsedApplication): ReadinessFlag[] {
@@ -130,31 +151,26 @@ export function checkClaimForm(app: ParsedApplication): ReadinessFlag[] {
 
   app.claims.forEach((claim) => {
     const text = claim.text.trim();
+    const issues: string[] = [];
 
     // Check if starts with capital letter
     if (text.length > 0 && !/^[A-Z]/.test(text)) {
-      flags.push(
-        createFlag({
-          type: "claim_form",
-          severity: "error",
-          location: {
-            type: "claim",
-            identifier: `claim ${claim.number}`,
-            lineNumber: claim.lineNumber,
-          },
-          description: `Claim ${claim.number} does not begin with a capital letter.`,
-          suggestedFix: `Capitalize the first letter of the claim.`,
-          citation: {
-            section: "MPEP 608.01(m)",
-            description:
-              "Each claim must be a single sentence beginning with a capital letter",
-          },
-        }),
-      );
+      issues.push("does not begin with a capital letter");
     }
 
     // Check if ends with period
     if (text.length > 0 && !text.endsWith(".")) {
+      issues.push("does not end with a period");
+    }
+
+    // Check for multiple sentences (multiple periods not at the end)
+    const periodCount = (text.match(/\./g) || []).length;
+    if (periodCount > 1) {
+      issues.push("may contain multiple sentences");
+    }
+
+    // Create grouped finding if any issues exist
+    if (issues.length > 0) {
       flags.push(
         createFlag({
           type: "claim_form",
@@ -164,33 +180,12 @@ export function checkClaimForm(app: ParsedApplication): ReadinessFlag[] {
             identifier: `claim ${claim.number}`,
             lineNumber: claim.lineNumber,
           },
-          description: `Claim ${claim.number} does not end with a period.`,
-          suggestedFix: `End the claim with a period.`,
+          description: `Claim ${claim.number} ${issues.join(" and ")}.`,
+          suggestedFix: `Claim must be a single sentence beginning with a capital letter and ending with a period.`,
           citation: {
             section: "MPEP 608.01(m)",
-            description: "Each claim must end with a period",
-          },
-        }),
-      );
-    }
-
-    // Check for multiple sentences (naive check: multiple periods not at the end)
-    const periodCount = (text.match(/\./g) || []).length;
-    if (periodCount > 1) {
-      flags.push(
-        createFlag({
-          type: "claim_form",
-          severity: "warning",
-          location: {
-            type: "claim",
-            identifier: `claim ${claim.number}`,
-            lineNumber: claim.lineNumber,
-          },
-          description: `Claim ${claim.number} may contain multiple sentences (multiple periods detected).`,
-          suggestedFix: `Each claim should be a single sentence. Consider using semicolons or commas instead.`,
-          citation: {
-            section: "MPEP 608.01(m)",
-            description: "Each claim must be a single sentence",
+            description:
+              "Each claim must be a single sentence beginning with a capital letter and ending with a period",
           },
         }),
       );
@@ -202,6 +197,7 @@ export function checkClaimForm(app: ParsedApplication): ReadinessFlag[] {
 
 /**
  * Check consecutive page numbering
+ * Groups cascading errors into a single finding
  * 37 CFR 1.52(b)(5)
  */
 export function checkPageNumbering(app: ParsedApplication): ReadinessFlag[] {
@@ -211,29 +207,40 @@ export function checkPageNumbering(app: ParsedApplication): ReadinessFlag[] {
     return flags;
   }
 
+  const issues: Array<{ expected: number; actual: number }> = [];
+
   for (let i = 0; i < app.pages.length; i++) {
     const expectedPage = i + 1;
     const actualPage = app.pages[i];
 
     if (actualPage !== expectedPage) {
-      flags.push(
-        createFlag({
-          type: "page_numbering",
-          severity: "error",
-          location: {
-            type: "page",
-            identifier: `page ${actualPage}`,
-          },
-          description: `Page ${actualPage} is out of sequence. Expected page ${expectedPage}.`,
-          suggestedFix: `Renumber pages consecutively starting from 1.`,
-          citation: {
-            section: "MPEP 608.02",
-            cfr: "37 CFR 1.52(b)(5)",
-            description: "Pages must be numbered consecutively",
-          },
-        }),
-      );
+      issues.push({ expected: expectedPage, actual: actualPage });
     }
+  }
+
+  // Create grouped finding for page numbering issues
+  if (issues.length > 0) {
+    const firstIssue = issues[0];
+    const affectedPages = issues.map((iss) => iss.actual);
+    const missingPage = firstIssue.expected;
+
+    flags.push(
+      createFlag({
+        type: "page_numbering",
+        severity: "error",
+        location: {
+          type: "page",
+          identifier: `page ${firstIssue.actual}`,
+        },
+        description: `Pages are not numbered consecutively. Missing page ${missingPage}, affecting pages ${affectedPages.join(", ")}.`,
+        suggestedFix: `Renumber pages consecutively starting from 1. Insert or correct page ${missingPage}.`,
+        citation: {
+          section: "MPEP 608.02",
+          cfr: "37 CFR 1.52(b)(5)",
+          description: "Pages must be numbered consecutively",
+        },
+      }),
+    );
   }
 
   return flags;

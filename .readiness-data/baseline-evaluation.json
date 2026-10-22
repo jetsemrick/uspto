@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-10-22T20:18:06.373Z",
+  "timestamp": "2026-10-22T20:21:38.017Z",
   "modelVersion": "grok-4-1-fast-reasoning",
   "promptVersion": "v1.0",
   "totalApplications": 50,
   "overallMetrics": {
-    "precision": 0.6352941176470588,
+    "precision": 1,
     "recall": 0.9152542372881356,
-    "f1Score": 0.75
+    "f1Score": 0.9557522123893806
   },
   "perDefectMetrics": [
     {
@@ -21,20 +21,20 @@
     {
       "defectType": "claim_numbering",
       "truePositives": 15,
-      "falsePositives": 15,
+      "falsePositives": 0,
       "falseNegatives": 0,
-      "precision": 0.5,
+      "precision": 1,
       "recall": 1,
-      "f1Score": 0.6666666666666666
+      "f1Score": 1
     },
     {
       "defectType": "claim_form",
       "truePositives": 11,
-      "falsePositives": 11,
+      "falsePositives": 0,
       "falseNegatives": 0,
-      "precision": 0.5,
+      "precision": 1,
       "recall": 1,
-      "f1Score": 0.6666666666666666
+      "f1Score": 1
     },
     {
       "defectType": "drawing_reference",
@@ -48,11 +48,11 @@
     {
       "defectType": "page_numbering",
       "truePositives": 5,
-      "falsePositives": 5,
+      "falsePositives": 0,
       "falseNegatives": 0,
-      "precision": 0.5,
+      "precision": 1,
       "recall": 1,
-      "f1Score": 0.6666666666666666
+      "f1Score": 1
     },
     {
       "defectType": "antecedent_basis",
@@ -64,414 +64,5 @@
       "f1Score": 0
     }
   ],
-  "falsePositiveExamples": [
-    {
-      "applicationId": "app-claim_numbering-1",
-      "flag": {
-        "id": "72c932f7-2711-4f22-bbe5-896967cd7808",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_numbering-2",
-      "flag": {
-        "id": "a7b73cd8-7e96-413b-a118-5d47875ac65f",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_numbering-3",
-      "flag": {
-        "id": "a8b77b7a-3ba1-4308-a55d-24cf807aafc0",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_numbering-4",
-      "flag": {
-        "id": "385e4635-9571-41d7-8e37-ef24e5dc52bf",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_numbering-5",
-      "flag": {
-        "id": "c28d3d2c-a931-4f36-8b42-ea8367712351",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_form-1",
-      "flag": {
-        "id": "b47fdc68-63f1-44f4-b8ad-c13bc6109ba3",
-        "type": "claim_form",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 1",
-          "lineNumber": 100
-        },
-        "description": "Claim 1 does not end with a period.",
-        "suggestedFix": "End the claim with a period.",
-        "citation": {
-          "section": "MPEP 608.01(m)",
-          "description": "Each claim must end with a period"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_form-2",
-      "flag": {
-        "id": "79020b5f-f910-4bbc-9aee-9870c15046d8",
-        "type": "claim_form",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 1",
-          "lineNumber": 100
-        },
-        "description": "Claim 1 does not end with a period.",
-        "suggestedFix": "End the claim with a period.",
-        "citation": {
-          "section": "MPEP 608.01(m)",
-          "description": "Each claim must end with a period"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_form-3",
-      "flag": {
-        "id": "ea2b1385-b31f-4c4a-a31d-5929e41891ea",
-        "type": "claim_form",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 1",
-          "lineNumber": 100
-        },
-        "description": "Claim 1 does not end with a period.",
-        "suggestedFix": "End the claim with a period.",
-        "citation": {
-          "section": "MPEP 608.01(m)",
-          "description": "Each claim must end with a period"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_form-4",
-      "flag": {
-        "id": "4d850014-432c-437b-b137-b016b171b2b5",
-        "type": "claim_form",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 1",
-          "lineNumber": 100
-        },
-        "description": "Claim 1 does not end with a period.",
-        "suggestedFix": "End the claim with a period.",
-        "citation": {
-          "section": "MPEP 608.01(m)",
-          "description": "Each claim must end with a period"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-claim_form-5",
-      "flag": {
-        "id": "db1c04a4-9136-4279-b728-fdf41164dd51",
-        "type": "claim_form",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 1",
-          "lineNumber": 100
-        },
-        "description": "Claim 1 does not end with a period.",
-        "suggestedFix": "End the claim with a period.",
-        "citation": {
-          "section": "MPEP 608.01(m)",
-          "description": "Each claim must end with a period"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-page_numbering-1",
-      "flag": {
-        "id": "6d97823d-b8fc-4a01-8758-5ef87fca312d",
-        "type": "page_numbering",
-        "severity": "error",
-        "location": {
-          "type": "page",
-          "identifier": "page 5"
-        },
-        "description": "Page 5 is out of sequence. Expected page 4.",
-        "suggestedFix": "Renumber pages consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.52(b)(5)",
-          "description": "Pages must be numbered consecutively"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-page_numbering-2",
-      "flag": {
-        "id": "62c9b1ab-a10a-4518-9b92-d0fabf0823fa",
-        "type": "page_numbering",
-        "severity": "error",
-        "location": {
-          "type": "page",
-          "identifier": "page 5"
-        },
-        "description": "Page 5 is out of sequence. Expected page 4.",
-        "suggestedFix": "Renumber pages consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.52(b)(5)",
-          "description": "Pages must be numbered consecutively"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-page_numbering-3",
-      "flag": {
-        "id": "596063fb-aa12-4f1f-8c25-730302f5a416",
-        "type": "page_numbering",
-        "severity": "error",
-        "location": {
-          "type": "page",
-          "identifier": "page 5"
-        },
-        "description": "Page 5 is out of sequence. Expected page 4.",
-        "suggestedFix": "Renumber pages consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.52(b)(5)",
-          "description": "Pages must be numbered consecutively"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-page_numbering-4",
-      "flag": {
-        "id": "4f9f30c2-d031-4c4c-bb74-46db07d59b6f",
-        "type": "page_numbering",
-        "severity": "error",
-        "location": {
-          "type": "page",
-          "identifier": "page 5"
-        },
-        "description": "Page 5 is out of sequence. Expected page 4.",
-        "suggestedFix": "Renumber pages consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.52(b)(5)",
-          "description": "Pages must be numbered consecutively"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-page_numbering-5",
-      "flag": {
-        "id": "363690fb-9d2e-4a26-8296-416d839a602c",
-        "type": "page_numbering",
-        "severity": "error",
-        "location": {
-          "type": "page",
-          "identifier": "page 5"
-        },
-        "description": "Page 5 is out of sequence. Expected page 4.",
-        "suggestedFix": "Renumber pages consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.52(b)(5)",
-          "description": "Pages must be numbered consecutively"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-multi-1",
-      "flag": {
-        "id": "4ebd1e11-c864-4b49-aba2-9d0c68acb32b",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-multi-2",
-      "flag": {
-        "id": "8786e869-cb00-4316-9aa4-fc7f376e8397",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-multi-2",
-      "flag": {
-        "id": "f10f0d42-9c49-4ce5-bd6c-5ecaf900861d",
-        "type": "claim_form",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 1",
-          "lineNumber": 100
-        },
-        "description": "Claim 1 does not end with a period.",
-        "suggestedFix": "End the claim with a period.",
-        "citation": {
-          "section": "MPEP 608.01(m)",
-          "description": "Each claim must end with a period"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-multi-3",
-      "flag": {
-        "id": "22c6672c-2069-494d-ac05-df46f4bf245f",
-        "type": "claim_numbering",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 4",
-          "lineNumber": 120
-        },
-        "description": "Claim 4 is out of sequence. Expected claim 3.",
-        "suggestedFix": "Renumber claims consecutively starting from 1.",
-        "citation": {
-          "section": "MPEP 608.01(j)",
-          "cfr": "37 CFR 1.126",
-          "description": "Claims must be numbered consecutively in Arabic numerals"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-multi-3",
-      "flag": {
-        "id": "41112549-39ea-46e9-8029-afc4efa96826",
-        "type": "claim_form",
-        "severity": "error",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 1",
-          "lineNumber": 100
-        },
-        "description": "Claim 1 does not end with a period.",
-        "suggestedFix": "End the claim with a period.",
-        "citation": {
-          "section": "MPEP 608.01(m)",
-          "description": "Each claim must end with a period"
-        },
-        "isDeterministic": true
-      }
-    }
-  ]
+  "falsePositiveExamples": []
 }
