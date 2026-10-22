@@ -7,11 +7,14 @@ import type { ReadinessReport } from "@/lib/types/readiness";
 import { runDeterministicChecks } from "@/lib/readiness/deterministic-checks";
 import { checkAntecedentBasisSafe } from "@/lib/readiness/llm-checks";
 import { getSyntheticApplication } from "@/lib/readiness/synthetic-data";
+import { parseDocx, parsePatentCenterFlags } from "@/lib/readiness/docx-parser";
 
 export const maxDuration = 120;
 
 interface RequestBody {
-  applicationId: string;
+  applicationId?: string;
+  docxContent?: string; // Base64 encoded DOCX
+  patentCenterFlags?: string[];
   mode?: "applicant" | "examiner";
 }
 
@@ -19,23 +22,42 @@ export async function POST(req: Request) {
   try {
     const body = (await req.json()) as RequestBody;
 
-    if (!body.applicationId) {
+    let app;
+    let applicationId: string;
+
+    // Handle uploaded DOCX
+    if (body.docxContent) {
+      applicationId = `uploaded-${Date.now()}`;
+      const buffer = Buffer.from(body.docxContent, "base64");
+      app = await parseDocx(buffer, applicationId);
+
+      // Process Patent Center flags if provided
+      if (body.patentCenterFlags && body.patentCenterFlags.length > 0) {
+        const pcFlags = parsePatentCenterFlags(body.patentCenterFlags);
+        console.log(
+          `Patent Center flags received: ${pcFlags.length} flags`,
+          pcFlags,
+        );
+        // These could be used to pre-filter or prioritize checks
+      }
+    }
+    // Handle synthetic test application
+    else if (body.applicationId) {
+      applicationId = body.applicationId;
+      const result = getSyntheticApplication(body.applicationId);
+      if (!result) {
+        return Response.json(
+          { error: `Application ${body.applicationId} not found` },
+          { status: 404 },
+        );
+      }
+      app = result.app;
+    } else {
       return Response.json(
-        { error: "applicationId is required" },
+        { error: "Either applicationId or docxContent is required" },
         { status: 400 },
       );
     }
-
-    // Get synthetic application (in production, this would parse uploaded DOCX)
-    const result = getSyntheticApplication(body.applicationId);
-    if (!result) {
-      return Response.json(
-        { error: `Application ${body.applicationId} not found` },
-        { status: 404 },
-      );
-    }
-
-    const { app } = result;
 
     // Run all checks
     const deterministicFlags = runDeterministicChecks(app);
@@ -48,7 +70,7 @@ export async function POST(req: Request) {
 
     // Build report
     const report: ReadinessReport = {
-      applicationId: body.applicationId,
+      applicationId,
       checkTimestamp: new Date().toISOString(),
       flags: allFlags,
       summary: {

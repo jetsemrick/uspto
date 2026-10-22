@@ -9,6 +9,7 @@ export interface SyntheticApplicationOptions {
   technologyArea: string;
   includeDefects?: DefectType[];
   isClean?: boolean;
+  includeSequenceListing?: boolean;
 }
 
 const TECHNOLOGY_AREAS = [
@@ -30,8 +31,9 @@ const CLEAN_ABSTRACT = `A method for optimizing thermal management in electronic
 export function generateCleanApplication(
   id: string,
   technologyArea: string,
+  includeSequenceListing = false,
 ): ParsedApplication {
-  return {
+  const baseApp: ParsedApplication = {
     applicationId: id,
     abstract: CLEAN_ABSTRACT,
     claims: [
@@ -72,6 +74,61 @@ export function generateCleanApplication(
     drawingReferences: ["10", "12", "14", "16", "20", "30", "32", "34"],
     pages: [1, 2, 3, 4, 5],
   };
+
+  if (includeSequenceListing) {
+    // Add biotechnology-specific content with sequence listing
+    baseApp.abstract = `An isolated nucleic acid molecule encoding a novel thermostable enzyme is provided. The enzyme exhibits enhanced catalytic activity at elevated temperatures. The nucleic acid sequence is set forth in SEQ ID NO:1. Methods for using the enzyme in industrial processes are disclosed. Applications include biofuel production and pharmaceutical synthesis.`;
+    
+    baseApp.claims = [
+      {
+        number: 1,
+        text: "An isolated nucleic acid molecule comprising a nucleotide sequence encoding a thermostable enzyme, wherein the nucleotide sequence is at least 95% identical to SEQ ID NO:1.",
+        lineNumber: 100,
+      },
+      {
+        number: 2,
+        text: "The isolated nucleic acid molecule of claim 1, wherein the nucleotide sequence is SEQ ID NO:1.",
+        lineNumber: 110,
+      },
+      {
+        number: 3,
+        text: "A recombinant vector comprising the isolated nucleic acid molecule of claim 1.",
+        lineNumber: 120,
+      },
+      {
+        number: 4,
+        text: "A host cell comprising the recombinant vector of claim 3.",
+        lineNumber: 130,
+      },
+    ];
+
+    baseApp.paragraphs = [
+      {
+        number: "[0001]",
+        text: "This invention relates to thermostable enzymes for industrial applications.",
+        lineNumber: 10,
+      },
+      {
+        number: "[0002]",
+        text: "The nucleic acid sequence encoding the thermostable enzyme is provided as SEQ ID NO:1 in the sequence listing. The amino acid sequence of the enzyme is provided as SEQ ID NO:2.",
+        lineNumber: 15,
+      },
+      {
+        number: "[0003]",
+        text: "SEQ ID NO:1 is a 1,500 nucleotide sequence encoding the thermostable enzyme. SEQ ID NO:2 is the corresponding 500 amino acid protein sequence.",
+        lineNumber: 20,
+      },
+      {
+        number: "[0004]",
+        text: "The enzyme exhibits optimal activity at 85°C and maintains 70% activity after 24 hours at this temperature.",
+        lineNumber: 25,
+      },
+    ];
+
+    baseApp.pages = [1, 2, 3, 4, 5, 6]; // Extra page for sequence listing
+  }
+
+  return baseApp;
 }
 
 /**
@@ -146,7 +203,11 @@ export function generateSyntheticApplication(
   id: string,
   options: SyntheticApplicationOptions,
 ): { app: ParsedApplication; groundTruth: GroundTruth } {
-  let app = generateCleanApplication(id, options.technologyArea);
+  let app = generateCleanApplication(
+    id,
+    options.technologyArea,
+    options.includeSequenceListing,
+  );
 
   const seededDefects: GroundTruth["seededDefects"] = [];
 
@@ -222,7 +283,7 @@ export function generateTestSuite(): Array<{
 }> {
   const suite: Array<{ app: ParsedApplication; groundTruth: GroundTruth }> = [];
 
-  // Generate 10 clean applications (controls)
+  // Generate 10 clean applications (controls), including one with sequence listing
   for (let i = 0; i < 10; i++) {
     const techArea =
       TECHNOLOGY_AREAS[i % TECHNOLOGY_AREAS.length];
@@ -230,6 +291,7 @@ export function generateTestSuite(): Array<{
       generateSyntheticApplication(`app-clean-${i + 1}`, {
         technologyArea: techArea,
         isClean: true,
+        includeSequenceListing: i === 3, // app-clean-4 has sequence listing
       }),
     );
   }

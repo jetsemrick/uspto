@@ -215,7 +215,7 @@ export function formatEvaluationReport(report: EvaluationReport): string {
   report.perDefectMetrics.forEach((metric) => {
     lines.push(
       sprintf(
-        "%-25s %5d %5d %5d %9.1f%% %9.1f%% %9.1f%%",
+        "%-25s %5d %5d %5d %10.1f%% %10.1f%% %10.1f%%",
         metric.defectType,
         metric.truePositives,
         metric.falsePositives,
@@ -255,35 +255,38 @@ export function formatEvaluationReport(report: EvaluationReport): string {
  */
 function sprintf(format: string, ...args: any[]): string {
   let result = format;
-  args.forEach((arg) => {
-    result = result.replace(
-      /%(-?)(\d*)(?:\.(\d+))?([sdif%])/,
-      (match, leftAlign, width, precision, type) => {
-        if (type === "%") return "%";
+  let argIndex = 0;
 
-        let str = "";
-        if (type === "s") {
-          str = String(arg);
-        } else if (type === "d" || type === "i") {
-          str = String(Math.floor(Number(arg)));
-        } else if (type === "f") {
-          const num = Number(arg);
-          str = precision ? num.toFixed(Number(precision)) : String(num);
+  result = result.replace(
+    /%(-?)(\d*)(?:\.(\d+))?([sdif%])/g,
+    (match, leftAlign, width, precision, type) => {
+      if (type === "%") return "%";
+      
+      const arg = args[argIndex++];
+      let str = "";
+      
+      if (type === "s") {
+        str = String(arg);
+      } else if (type === "d" || type === "i") {
+        str = String(Math.floor(Number(arg)));
+      } else if (type === "f") {
+        const num = Number(arg);
+        str = precision ? num.toFixed(Number(precision)) : String(num);
+      }
+
+      if (width) {
+        const w = Number(width);
+        if (leftAlign) {
+          str = str.padEnd(w, " ");
+        } else {
+          str = str.padStart(w, " ");
         }
+      }
 
-        if (width) {
-          const w = Number(width);
-          if (leftAlign) {
-            str = str.padEnd(w, " ");
-          } else {
-            str = str.padStart(w, " ");
-          }
-        }
-
-        return str;
-      },
-    );
-  });
+      return str;
+    },
+  );
+  
   return result;
 }
 

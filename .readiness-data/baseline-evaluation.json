@@ -1,0 +1,469 @@
+{
+  "timestamp": "2026-10-22T20:10:43.120Z",
+  "modelVersion": "grok-4-1-fast-reasoning",
+  "promptVersion": "v1.0",
+  "totalApplications": 50,
+  "overallMetrics": {
+    "precision": 0.18495297805642633,
+    "recall": 1,
+    "f1Score": 0.31216931216931215
+  },
+  "perDefectMetrics": [
+    {
+      "defectType": "abstract_length",
+      "truePositives": 15,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "defectType": "claim_numbering",
+      "truePositives": 15,
+      "falsePositives": 15,
+      "falseNegatives": 0,
+      "precision": 0.5,
+      "recall": 1,
+      "f1Score": 0.6666666666666666
+    },
+    {
+      "defectType": "claim_form",
+      "truePositives": 11,
+      "falsePositives": 11,
+      "falseNegatives": 0,
+      "precision": 0.5,
+      "recall": 1,
+      "f1Score": 0.6666666666666666
+    },
+    {
+      "defectType": "drawing_reference",
+      "truePositives": 8,
+      "falsePositives": 14,
+      "falseNegatives": 0,
+      "precision": 0.36363636363636365,
+      "recall": 1,
+      "f1Score": 0.5333333333333333
+    },
+    {
+      "defectType": "page_numbering",
+      "truePositives": 5,
+      "falsePositives": 5,
+      "falseNegatives": 0,
+      "precision": 0.5,
+      "recall": 1,
+      "f1Score": 0.6666666666666666
+    },
+    {
+      "defectType": "antecedent_basis",
+      "truePositives": 5,
+      "falsePositives": 215,
+      "falseNegatives": 0,
+      "precision": 0.022727272727272728,
+      "recall": 1,
+      "f1Score": 0.044444444444444446
+    }
+  ],
+  "falsePositiveExamples": [
+    {
+      "applicationId": "app-clean-1",
+      "flag": {
+        "id": "125ef453-2f79-4269-817d-219b56536abb",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 2",
+          "lineNumber": 110
+        },
+        "description": "Possible antecedent basis issue in claim 2: term \"thermal\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-1",
+      "flag": {
+        "id": "d2246311-2612-45c8-b4d2-3fd81b9ba26f",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 2",
+          "lineNumber": 110
+        },
+        "description": "Possible antecedent basis issue in claim 2: term \"sensor\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"sensor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-1",
+      "flag": {
+        "id": "e39c3283-1c6d-40bf-b942-e9a0a95a3976",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 3",
+          "lineNumber": 120
+        },
+        "description": "Possible antecedent basis issue in claim 3: term \"thermal\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-1",
+      "flag": {
+        "id": "e5909444-b443-4aa5-9cec-d245383b4e5c",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 3",
+          "lineNumber": 120
+        },
+        "description": "Possible antecedent basis issue in claim 3: term \"processor\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"processor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-2",
+      "flag": {
+        "id": "359c0a86-4b65-48d3-924e-bdddc8de3d32",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 2",
+          "lineNumber": 110
+        },
+        "description": "Possible antecedent basis issue in claim 2: term \"thermal\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-2",
+      "flag": {
+        "id": "e95f8bbe-4845-4b66-b973-c588d3f10311",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 2",
+          "lineNumber": 110
+        },
+        "description": "Possible antecedent basis issue in claim 2: term \"sensor\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"sensor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-2",
+      "flag": {
+        "id": "a76758cc-1514-4f89-9ebd-d27affec6600",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 3",
+          "lineNumber": 120
+        },
+        "description": "Possible antecedent basis issue in claim 3: term \"thermal\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-2",
+      "flag": {
+        "id": "500b01cd-1762-48d6-9139-460822cb135f",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 3",
+          "lineNumber": 120
+        },
+        "description": "Possible antecedent basis issue in claim 3: term \"processor\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"processor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-3",
+      "flag": {
+        "id": "37ab6952-9121-4ad5-85d9-ee90ad02f853",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 2",
+          "lineNumber": 110
+        },
+        "description": "Possible antecedent basis issue in claim 2: term \"thermal\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-3",
+      "flag": {
+        "id": "0fdad9c5-6c17-4b32-a52f-ed92b5ca16de",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 2",
+          "lineNumber": 110
+        },
+        "description": "Possible antecedent basis issue in claim 2: term \"sensor\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"sensor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-3",
+      "flag": {
+        "id": "1e452fef-0619-4581-a840-3d0de5d9f711",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 3",
+          "lineNumber": 120
+        },
+        "description": "Possible antecedent basis issue in claim 3: term \"thermal\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-3",
+      "flag": {
+        "id": "28825f6a-3e35-4df1-9f63-7f6e96e08421",
+        "type": "antecedent_basis",
+        "severity": "warning",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 3",
+          "lineNumber": 120
+        },
+        "description": "Possible antecedent basis issue in claim 3: term \"processor\" may lack proper introduction.",
+        "suggestedFix": "Review the term \"processor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "citation": {
+          "section": "MPEP 2173.05(e)",
+          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "a6b90974-2f2e-4158-a349-bbbe955a3ae3",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 10"
+        },
+        "description": "Drawing reference character \"10\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 10 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "468d5aef-a354-4942-a772-57c0557796c5",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 12"
+        },
+        "description": "Drawing reference character \"12\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 12 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "177c0f46-d355-4686-ac9b-67ab6fd9e845",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 14"
+        },
+        "description": "Drawing reference character \"14\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 14 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "bbaa85aa-46ee-4c5f-8039-aa9c4bee3c6d",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 16"
+        },
+        "description": "Drawing reference character \"16\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 16 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "7608bf52-2da4-480a-8a3e-ac3f9c3d0550",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 20"
+        },
+        "description": "Drawing reference character \"20\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 20 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "f89d92a4-17cb-433b-a3f9-52c25ea1220a",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 30"
+        },
+        "description": "Drawing reference character \"30\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 30 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "c14a1a03-69f4-471e-858c-9f2217c63c91",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 32"
+        },
+        "description": "Drawing reference character \"32\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 32 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-clean-4",
+      "flag": {
+        "id": "e70ae624-df59-4d27-8437-f572dac8dfda",
+        "type": "drawing_reference",
+        "severity": "error",
+        "location": {
+          "type": "figure",
+          "identifier": "reference 34"
+        },
+        "description": "Drawing reference character \"34\" is not mentioned in the specification.",
+        "suggestedFix": "Add reference character 34 to the description or remove it from the drawings.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.84(p)(5)",
+          "description": "Reference characters must appear in both the drawings and the description"
+        },
+        "isDeterministic": true
+      }
+    }
+  ]
+}

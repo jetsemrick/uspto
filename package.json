@@ -8,12 +8,16 @@
     "start": "next start",
     "lint": "eslint",
     "eval": "node scripts/run-evaluation.js --format text",
-    "test:integration": "node scripts/test-integration.js"
+    "test:integration": "node scripts/test-integration.js",
+    "regression": "node scripts/run-regression.js",
+    "regression:save": "node scripts/run-regression.js --save",
+    "regression:demo": "node scripts/run-regression.js --simulate"
   },
   "dependencies": {
     "@ai-sdk/react": "^4.0.149",
     "@ai-sdk/xai": "^5.0.25",
     "ai": "^7.0.145",
+    "mammoth": "^1.13.0",
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
