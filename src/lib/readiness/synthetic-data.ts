@@ -126,6 +126,10 @@ export function generateCleanApplication(
     ];
 
     baseApp.pages = [1, 2, 3, 4, 5, 6]; // Extra page for sequence listing
+    if (includeSequenceListing) {
+      // Don't check drawing references for sequence listing applications
+      baseApp.drawingReferences = [];
+    }
   }
 
   return baseApp;

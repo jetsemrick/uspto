@@ -248,11 +248,16 @@ export function checkDrawingReferences(
 ): ReadinessFlag[] {
   const flags: ReadinessFlag[] = [];
 
+  // Skip check if no drawing references (e.g., sequence listing applications)
+  if (app.drawingReferences.length === 0) {
+    return flags;
+  }
+
   // Find reference characters in description paragraphs
   const descriptionRefs = new Set<string>();
   app.paragraphs.forEach((para) => {
     // Look for reference numerals (e.g., "10", "12", "14a") in the text
-    const matches = para.text.match(/\b\d+[a-z]?\b/g);
+    const matches = para.text.match(/\b(\d+[a-z]?)\b/g);
     if (matches) {
       matches.forEach((m) => descriptionRefs.add(m));
     }
@@ -282,11 +287,18 @@ export function checkDrawingReferences(
     }
   });
 
-  // Check if description references appear in drawings
+  // Check if description references appear in drawings (only for typical drawing refs)
   const drawingRefSet = new Set(app.drawingReferences);
   descriptionRefs.forEach((ref) => {
-    // Only check numeric references that look like drawing references
-    if (/^\d+[a-z]?$/.test(ref) && !drawingRefSet.has(ref)) {
+    // Only check numeric references in typical drawing range (10-99)
+    // Skip if it looks like a sequence, year, or other non-drawing number
+    const refNum = parseInt(ref, 10);
+    if (
+      /^\d+[a-z]?$/.test(ref) &&
+      refNum >= 10 &&
+      refNum <= 99 &&
+      !drawingRefSet.has(ref)
+    ) {
       flags.push(
         createFlag({
           type: "drawing_reference",

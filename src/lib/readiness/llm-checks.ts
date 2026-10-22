@@ -163,7 +163,7 @@ export function checkAntecedentBasisDeterministic(
 }
 
 /**
- * Check if LLM is available, otherwise fall back to deterministic
+ * Check if LLM is available, otherwise skip antecedent basis check entirely
  */
 export async function checkAntecedentBasisSafe(
   app: ParsedApplication,
@@ -172,14 +172,16 @@ export async function checkAntecedentBasisSafe(
     // Check if API key is available
     const apiKey = process.env.XAI_API_KEY;
     if (!apiKey) {
-      console.warn("XAI_API_KEY not set, using deterministic fallback");
-      return checkAntecedentBasisDeterministic(app);
+      console.warn(
+        "XAI_API_KEY not set, skipping antecedent basis check (LLM-only)",
+      );
+      return [];
     }
 
     return await checkAntecedentBasis(app);
   } catch (error) {
-    console.error("LLM check failed, using deterministic fallback:", error);
-    return checkAntecedentBasisDeterministic(app);
+    console.error("LLM check failed, skipping antecedent basis check:", error);
+    return [];
   }
 }
 

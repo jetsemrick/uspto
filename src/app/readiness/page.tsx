@@ -17,6 +17,9 @@ export default function ReadinessDemo() {
   const [report, setReport] = useState<ReadinessReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadMode, setUploadMode] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [patentCenterFlags, setPatentCenterFlags] = useState<string>("");
 
   // Load applications on mount
   useEffect(() => {
@@ -31,12 +34,60 @@ export default function ReadinessDemo() {
     setError(null);
     setSelectedApp(applicationId);
     setReport(null);
+    setUploadMode(false);
 
     try {
       const res = await fetch("/api/readiness-check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ applicationId }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Check failed");
+      }
+
+      const data = await res.json();
+      setReport(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const checkUploadedFile = async () => {
+    if (!uploadFile) return;
+
+    setLoading(true);
+    setError(null);
+    setReport(null);
+    setSelectedApp(null);
+
+    try {
+      // Convert file to base64
+      const buffer = await uploadFile.arrayBuffer();
+      const base64 = btoa(
+        new Uint8Array(buffer).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          "",
+        ),
+      );
+
+      // Parse Patent Center flags
+      const flags = patentCenterFlags
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
+
+      const res = await fetch("/api/readiness-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          docxContent: base64,
+          patentCenterFlags: flags.length > 0 ? flags : undefined,
+        }),
       });
 
       if (!res.ok) {
@@ -70,11 +121,60 @@ export default function ReadinessDemo() {
           {/* Application List */}
           <div className="col-span-4">
             <div className="bg-white rounded-lg shadow p-4">
-              <h2 className="text-lg font-semibold mb-4">
-                Test Applications ({applications.length})
-              </h2>
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
-                {applications.map((app) => (
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">
+                  {uploadMode ? "Upload Application" : `Test Applications (${applications.length})`}
+                </h2>
+                <button
+                  onClick={() => {
+                    setUploadMode(!uploadMode);
+                    setSelectedApp(null);
+                    setReport(null);
+                    setError(null);
+                  }}
+                  className="text-sm text-blue-600 hover:text-blue-800"
+                >
+                  {uploadMode ? "← Back to list" : "Upload DOCX"}
+                </button>
+              </div>
+
+              {uploadMode ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Patent Application (DOCX)
+                    </label>
+                    <input
+                      type="file"
+                      accept=".docx"
+                      onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Patent Center Flags (optional, one per line)
+                    </label>
+                    <textarea
+                      value={patentCenterFlags}
+                      onChange={(e) => setPatentCenterFlags(e.target.value)}
+                      placeholder="FORMAT:Claim 1 missing period&#10;REFERENCE:Drawing ref 99 not in spec"
+                      rows={4}
+                      className="block w-full text-sm border border-gray-300 rounded p-2"
+                    />
+                  </div>
+
+                  <button
+                    onClick={checkUploadedFile}
+                    disabled={!uploadFile || loading}
+                    className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {loading ? "Checking..." : "Check Application"}
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-[600px] overflow-y-auto">{applications.map((app) => (
                   <button
                     key={app.applicationId}
                     onClick={() => checkApplication(app.applicationId)}
@@ -103,8 +203,8 @@ export default function ReadinessDemo() {
                       )}
                     </div>
                   </button>
-                ))}
-              </div>
+                ))}</div>
+              )}
             </div>
           </div>
 

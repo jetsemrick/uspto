@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-10-22T20:10:43.120Z",
+  "timestamp": "2026-10-22T20:18:06.373Z",
   "modelVersion": "grok-4-1-fast-reasoning",
   "promptVersion": "v1.0",
   "totalApplications": 50,
   "overallMetrics": {
-    "precision": 0.18495297805642633,
-    "recall": 1,
-    "f1Score": 0.31216931216931215
+    "precision": 0.6352941176470588,
+    "recall": 0.9152542372881356,
+    "f1Score": 0.75
   },
   "perDefectMetrics": [
     {
@@ -39,11 +39,11 @@
     {
       "defectType": "drawing_reference",
       "truePositives": 8,
-      "falsePositives": 14,
+      "falsePositives": 0,
       "falseNegatives": 0,
-      "precision": 0.36363636363636365,
+      "precision": 1,
       "recall": 1,
-      "f1Score": 0.5333333333333333
+      "f1Score": 1
     },
     {
       "defectType": "page_numbering",
@@ -56,411 +56,419 @@
     },
     {
       "defectType": "antecedent_basis",
-      "truePositives": 5,
-      "falsePositives": 215,
-      "falseNegatives": 0,
-      "precision": 0.022727272727272728,
-      "recall": 1,
-      "f1Score": 0.044444444444444446
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 5,
+      "precision": 0,
+      "recall": 0,
+      "f1Score": 0
     }
   ],
   "falsePositiveExamples": [
     {
-      "applicationId": "app-clean-1",
+      "applicationId": "app-claim_numbering-1",
       "flag": {
-        "id": "125ef453-2f79-4269-817d-219b56536abb",
-        "type": "antecedent_basis",
-        "severity": "warning",
+        "id": "72c932f7-2711-4f22-bbe5-896967cd7808",
+        "type": "claim_numbering",
+        "severity": "error",
         "location": {
           "type": "claim",
-          "identifier": "claim 2",
-          "lineNumber": 110
-        },
-        "description": "Possible antecedent basis issue in claim 2: term \"thermal\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
-        "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-1",
-      "flag": {
-        "id": "d2246311-2612-45c8-b4d2-3fd81b9ba26f",
-        "type": "antecedent_basis",
-        "severity": "warning",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 2",
-          "lineNumber": 110
-        },
-        "description": "Possible antecedent basis issue in claim 2: term \"sensor\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"sensor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
-        "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-1",
-      "flag": {
-        "id": "e39c3283-1c6d-40bf-b942-e9a0a95a3976",
-        "type": "antecedent_basis",
-        "severity": "warning",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 3",
+          "identifier": "claim 4",
           "lineNumber": 120
         },
-        "description": "Possible antecedent basis issue in claim 3: term \"thermal\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-1",
+      "applicationId": "app-claim_numbering-2",
       "flag": {
-        "id": "e5909444-b443-4aa5-9cec-d245383b4e5c",
-        "type": "antecedent_basis",
-        "severity": "warning",
+        "id": "a7b73cd8-7e96-413b-a118-5d47875ac65f",
+        "type": "claim_numbering",
+        "severity": "error",
         "location": {
           "type": "claim",
-          "identifier": "claim 3",
+          "identifier": "claim 4",
           "lineNumber": 120
         },
-        "description": "Possible antecedent basis issue in claim 3: term \"processor\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"processor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-2",
+      "applicationId": "app-claim_numbering-3",
       "flag": {
-        "id": "359c0a86-4b65-48d3-924e-bdddc8de3d32",
-        "type": "antecedent_basis",
-        "severity": "warning",
+        "id": "a8b77b7a-3ba1-4308-a55d-24cf807aafc0",
+        "type": "claim_numbering",
+        "severity": "error",
         "location": {
           "type": "claim",
-          "identifier": "claim 2",
-          "lineNumber": 110
-        },
-        "description": "Possible antecedent basis issue in claim 2: term \"thermal\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
-        "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-2",
-      "flag": {
-        "id": "e95f8bbe-4845-4b66-b973-c588d3f10311",
-        "type": "antecedent_basis",
-        "severity": "warning",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 2",
-          "lineNumber": 110
-        },
-        "description": "Possible antecedent basis issue in claim 2: term \"sensor\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"sensor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
-        "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-2",
-      "flag": {
-        "id": "a76758cc-1514-4f89-9ebd-d27affec6600",
-        "type": "antecedent_basis",
-        "severity": "warning",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 3",
+          "identifier": "claim 4",
           "lineNumber": 120
         },
-        "description": "Possible antecedent basis issue in claim 3: term \"thermal\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-2",
+      "applicationId": "app-claim_numbering-4",
       "flag": {
-        "id": "500b01cd-1762-48d6-9139-460822cb135f",
-        "type": "antecedent_basis",
-        "severity": "warning",
+        "id": "385e4635-9571-41d7-8e37-ef24e5dc52bf",
+        "type": "claim_numbering",
+        "severity": "error",
         "location": {
           "type": "claim",
-          "identifier": "claim 3",
+          "identifier": "claim 4",
           "lineNumber": 120
         },
-        "description": "Possible antecedent basis issue in claim 3: term \"processor\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"processor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-3",
+      "applicationId": "app-claim_numbering-5",
       "flag": {
-        "id": "37ab6952-9121-4ad5-85d9-ee90ad02f853",
-        "type": "antecedent_basis",
-        "severity": "warning",
+        "id": "c28d3d2c-a931-4f36-8b42-ea8367712351",
+        "type": "claim_numbering",
+        "severity": "error",
         "location": {
           "type": "claim",
-          "identifier": "claim 2",
-          "lineNumber": 110
-        },
-        "description": "Possible antecedent basis issue in claim 2: term \"thermal\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
-        "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-3",
-      "flag": {
-        "id": "0fdad9c5-6c17-4b32-a52f-ed92b5ca16de",
-        "type": "antecedent_basis",
-        "severity": "warning",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 2",
-          "lineNumber": 110
-        },
-        "description": "Possible antecedent basis issue in claim 2: term \"sensor\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"sensor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
-        "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-3",
-      "flag": {
-        "id": "1e452fef-0619-4581-a840-3d0de5d9f711",
-        "type": "antecedent_basis",
-        "severity": "warning",
-        "location": {
-          "type": "claim",
-          "identifier": "claim 3",
+          "identifier": "claim 4",
           "lineNumber": 120
         },
-        "description": "Possible antecedent basis issue in claim 3: term \"thermal\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"thermal\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-3",
+      "applicationId": "app-claim_form-1",
       "flag": {
-        "id": "28825f6a-3e35-4df1-9f63-7f6e96e08421",
-        "type": "antecedent_basis",
-        "severity": "warning",
+        "id": "b47fdc68-63f1-44f4-b8ad-c13bc6109ba3",
+        "type": "claim_form",
+        "severity": "error",
         "location": {
           "type": "claim",
-          "identifier": "claim 3",
+          "identifier": "claim 1",
+          "lineNumber": 100
+        },
+        "description": "Claim 1 does not end with a period.",
+        "suggestedFix": "End the claim with a period.",
+        "citation": {
+          "section": "MPEP 608.01(m)",
+          "description": "Each claim must end with a period"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-claim_form-2",
+      "flag": {
+        "id": "79020b5f-f910-4bbc-9aee-9870c15046d8",
+        "type": "claim_form",
+        "severity": "error",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 1",
+          "lineNumber": 100
+        },
+        "description": "Claim 1 does not end with a period.",
+        "suggestedFix": "End the claim with a period.",
+        "citation": {
+          "section": "MPEP 608.01(m)",
+          "description": "Each claim must end with a period"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-claim_form-3",
+      "flag": {
+        "id": "ea2b1385-b31f-4c4a-a31d-5929e41891ea",
+        "type": "claim_form",
+        "severity": "error",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 1",
+          "lineNumber": 100
+        },
+        "description": "Claim 1 does not end with a period.",
+        "suggestedFix": "End the claim with a period.",
+        "citation": {
+          "section": "MPEP 608.01(m)",
+          "description": "Each claim must end with a period"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-claim_form-4",
+      "flag": {
+        "id": "4d850014-432c-437b-b137-b016b171b2b5",
+        "type": "claim_form",
+        "severity": "error",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 1",
+          "lineNumber": 100
+        },
+        "description": "Claim 1 does not end with a period.",
+        "suggestedFix": "End the claim with a period.",
+        "citation": {
+          "section": "MPEP 608.01(m)",
+          "description": "Each claim must end with a period"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-claim_form-5",
+      "flag": {
+        "id": "db1c04a4-9136-4279-b728-fdf41164dd51",
+        "type": "claim_form",
+        "severity": "error",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 1",
+          "lineNumber": 100
+        },
+        "description": "Claim 1 does not end with a period.",
+        "suggestedFix": "End the claim with a period.",
+        "citation": {
+          "section": "MPEP 608.01(m)",
+          "description": "Each claim must end with a period"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-page_numbering-1",
+      "flag": {
+        "id": "6d97823d-b8fc-4a01-8758-5ef87fca312d",
+        "type": "page_numbering",
+        "severity": "error",
+        "location": {
+          "type": "page",
+          "identifier": "page 5"
+        },
+        "description": "Page 5 is out of sequence. Expected page 4.",
+        "suggestedFix": "Renumber pages consecutively starting from 1.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.52(b)(5)",
+          "description": "Pages must be numbered consecutively"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-page_numbering-2",
+      "flag": {
+        "id": "62c9b1ab-a10a-4518-9b92-d0fabf0823fa",
+        "type": "page_numbering",
+        "severity": "error",
+        "location": {
+          "type": "page",
+          "identifier": "page 5"
+        },
+        "description": "Page 5 is out of sequence. Expected page 4.",
+        "suggestedFix": "Renumber pages consecutively starting from 1.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.52(b)(5)",
+          "description": "Pages must be numbered consecutively"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-page_numbering-3",
+      "flag": {
+        "id": "596063fb-aa12-4f1f-8c25-730302f5a416",
+        "type": "page_numbering",
+        "severity": "error",
+        "location": {
+          "type": "page",
+          "identifier": "page 5"
+        },
+        "description": "Page 5 is out of sequence. Expected page 4.",
+        "suggestedFix": "Renumber pages consecutively starting from 1.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.52(b)(5)",
+          "description": "Pages must be numbered consecutively"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-page_numbering-4",
+      "flag": {
+        "id": "4f9f30c2-d031-4c4c-bb74-46db07d59b6f",
+        "type": "page_numbering",
+        "severity": "error",
+        "location": {
+          "type": "page",
+          "identifier": "page 5"
+        },
+        "description": "Page 5 is out of sequence. Expected page 4.",
+        "suggestedFix": "Renumber pages consecutively starting from 1.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.52(b)(5)",
+          "description": "Pages must be numbered consecutively"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-page_numbering-5",
+      "flag": {
+        "id": "363690fb-9d2e-4a26-8296-416d839a602c",
+        "type": "page_numbering",
+        "severity": "error",
+        "location": {
+          "type": "page",
+          "identifier": "page 5"
+        },
+        "description": "Page 5 is out of sequence. Expected page 4.",
+        "suggestedFix": "Renumber pages consecutively starting from 1.",
+        "citation": {
+          "section": "MPEP 608.02",
+          "cfr": "37 CFR 1.52(b)(5)",
+          "description": "Pages must be numbered consecutively"
+        },
+        "isDeterministic": true
+      }
+    },
+    {
+      "applicationId": "app-multi-1",
+      "flag": {
+        "id": "4ebd1e11-c864-4b49-aba2-9d0c68acb32b",
+        "type": "claim_numbering",
+        "severity": "error",
+        "location": {
+          "type": "claim",
+          "identifier": "claim 4",
           "lineNumber": 120
         },
-        "description": "Possible antecedent basis issue in claim 3: term \"processor\" may lack proper introduction.",
-        "suggestedFix": "Review the term \"processor\". If it has not been introduced with \"a\" or \"an\", add proper antecedent basis.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 2173.05(e)",
-          "description": "Claims must have proper antecedent basis - terms must be introduced before being referenced"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-4",
+      "applicationId": "app-multi-2",
       "flag": {
-        "id": "a6b90974-2f2e-4158-a349-bbbe955a3ae3",
-        "type": "drawing_reference",
+        "id": "8786e869-cb00-4316-9aa4-fc7f376e8397",
+        "type": "claim_numbering",
         "severity": "error",
         "location": {
-          "type": "figure",
-          "identifier": "reference 10"
+          "type": "claim",
+          "identifier": "claim 4",
+          "lineNumber": 120
         },
-        "description": "Drawing reference character \"10\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 10 to the description or remove it from the drawings.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-4",
+      "applicationId": "app-multi-2",
       "flag": {
-        "id": "468d5aef-a354-4942-a772-57c0557796c5",
-        "type": "drawing_reference",
+        "id": "f10f0d42-9c49-4ce5-bd6c-5ecaf900861d",
+        "type": "claim_form",
         "severity": "error",
         "location": {
-          "type": "figure",
-          "identifier": "reference 12"
+          "type": "claim",
+          "identifier": "claim 1",
+          "lineNumber": 100
         },
-        "description": "Drawing reference character \"12\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 12 to the description or remove it from the drawings.",
+        "description": "Claim 1 does not end with a period.",
+        "suggestedFix": "End the claim with a period.",
         "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
+          "section": "MPEP 608.01(m)",
+          "description": "Each claim must end with a period"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-4",
+      "applicationId": "app-multi-3",
       "flag": {
-        "id": "177c0f46-d355-4686-ac9b-67ab6fd9e845",
-        "type": "drawing_reference",
+        "id": "22c6672c-2069-494d-ac05-df46f4bf245f",
+        "type": "claim_numbering",
         "severity": "error",
         "location": {
-          "type": "figure",
-          "identifier": "reference 14"
+          "type": "claim",
+          "identifier": "claim 4",
+          "lineNumber": 120
         },
-        "description": "Drawing reference character \"14\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 14 to the description or remove it from the drawings.",
+        "description": "Claim 4 is out of sequence. Expected claim 3.",
+        "suggestedFix": "Renumber claims consecutively starting from 1.",
         "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
+          "section": "MPEP 608.01(j)",
+          "cfr": "37 CFR 1.126",
+          "description": "Claims must be numbered consecutively in Arabic numerals"
         },
         "isDeterministic": true
       }
     },
     {
-      "applicationId": "app-clean-4",
+      "applicationId": "app-multi-3",
       "flag": {
-        "id": "bbaa85aa-46ee-4c5f-8039-aa9c4bee3c6d",
-        "type": "drawing_reference",
+        "id": "41112549-39ea-46e9-8029-afc4efa96826",
+        "type": "claim_form",
         "severity": "error",
         "location": {
-          "type": "figure",
-          "identifier": "reference 16"
+          "type": "claim",
+          "identifier": "claim 1",
+          "lineNumber": 100
         },
-        "description": "Drawing reference character \"16\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 16 to the description or remove it from the drawings.",
+        "description": "Claim 1 does not end with a period.",
+        "suggestedFix": "End the claim with a period.",
         "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-4",
-      "flag": {
-        "id": "7608bf52-2da4-480a-8a3e-ac3f9c3d0550",
-        "type": "drawing_reference",
-        "severity": "error",
-        "location": {
-          "type": "figure",
-          "identifier": "reference 20"
-        },
-        "description": "Drawing reference character \"20\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 20 to the description or remove it from the drawings.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-4",
-      "flag": {
-        "id": "f89d92a4-17cb-433b-a3f9-52c25ea1220a",
-        "type": "drawing_reference",
-        "severity": "error",
-        "location": {
-          "type": "figure",
-          "identifier": "reference 30"
-        },
-        "description": "Drawing reference character \"30\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 30 to the description or remove it from the drawings.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-4",
-      "flag": {
-        "id": "c14a1a03-69f4-471e-858c-9f2217c63c91",
-        "type": "drawing_reference",
-        "severity": "error",
-        "location": {
-          "type": "figure",
-          "identifier": "reference 32"
-        },
-        "description": "Drawing reference character \"32\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 32 to the description or remove it from the drawings.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
-        },
-        "isDeterministic": true
-      }
-    },
-    {
-      "applicationId": "app-clean-4",
-      "flag": {
-        "id": "e70ae624-df59-4d27-8437-f572dac8dfda",
-        "type": "drawing_reference",
-        "severity": "error",
-        "location": {
-          "type": "figure",
-          "identifier": "reference 34"
-        },
-        "description": "Drawing reference character \"34\" is not mentioned in the specification.",
-        "suggestedFix": "Add reference character 34 to the description or remove it from the drawings.",
-        "citation": {
-          "section": "MPEP 608.02",
-          "cfr": "37 CFR 1.84(p)(5)",
-          "description": "Reference characters must appear in both the drawings and the description"
+          "section": "MPEP 608.01(m)",
+          "description": "Each claim must end with a period"
         },
         "isDeterministic": true
       }

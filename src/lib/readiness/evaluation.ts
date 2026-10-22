@@ -16,6 +16,7 @@ import { generateTestSuite } from "./synthetic-data";
 
 /**
  * Match detected flags against ground truth defects
+ * Updated to handle multiple flags per seeded defect
  */
 function matchFlagsToGroundTruth(
   flags: ReadinessFlag[],
@@ -27,26 +28,31 @@ function matchFlagsToGroundTruth(
 } {
   const truePositives: ReadinessFlag[] = [];
   const falsePositives: ReadinessFlag[] = [];
-  const unmatchedDefects = [...groundTruth.seededDefects];
+  const matchedDefectIndices = new Set<number>();
 
   // Match each flag to a ground truth defect
   flags.forEach((flag) => {
-    const matchIndex = unmatchedDefects.findIndex(
-      (defect) => defect.type === flag.type,
+    // Find an unmatched defect of this type
+    const matchIndex = groundTruth.seededDefects.findIndex(
+      (defect, idx) => defect.type === flag.type && !matchedDefectIndices.has(idx),
     );
 
     if (matchIndex >= 0) {
       // True positive: flag matches a seeded defect
       truePositives.push(flag);
-      unmatchedDefects.splice(matchIndex, 1);
+      matchedDefectIndices.add(matchIndex);
+      // Note: We don't remove the defect because one seeded defect
+      // can produce multiple flags (e.g., claim missing capital AND period)
     } else {
-      // False positive: flag doesn't match any seeded defect
+      // False positive: flag doesn't match any unmatched seeded defect
       falsePositives.push(flag);
     }
   });
 
-  // Remaining unmatched defects are false negatives
-  const falseNegatives = unmatchedDefects;
+  // Unmatched defects are false negatives
+  const falseNegatives = groundTruth.seededDefects.filter(
+    (_, idx) => !matchedDefectIndices.has(idx),
+  );
 
   return { truePositives, falsePositives, falseNegatives };
 }
