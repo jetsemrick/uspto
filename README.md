@@ -1,4 +1,37 @@
-# USPTO §103 examiner workspace
+# USPTO AI Demonstrations
+
+Demonstration systems for USPTO Super Intelligence Roundtable (SpaceXAI / Anysphere, Nov 10, 2026).
+
+## Demos
+
+### 1. Application Readiness & Formalities Check
+
+**Path**: `/readiness` | **API**: `/api/readiness-check` | **Docs**: [READINESS_README.md](./READINESS_README.md)
+
+Modular REST/JSON API component for automated patent application readiness verification (USPTO objective 1a). Performs formalities checks on patent applications including:
+
+- Abstract length (≤150 words)
+- Claim numbering and form
+- Drawing reference consistency
+- Page numbering
+- Antecedent basis in claims
+
+**Key Features**:
+- 50 synthetic test applications with ground truth
+- Deterministic + LLM-based checks (Grok API)
+- Precision/recall evaluation harness
+- Applicant & examiner report views
+
+**Quick Start**:
+```bash
+npm run dev
+# Visit http://localhost:3000/readiness
+# Or run evaluation: npm run eval
+```
+
+### 2. §103 Obviousness Examiner Workspace
+
+**Path**: `/examiner`
 
 Desktop demo for patent examiners: load an application and prior-art references, confirm a limitation split, review a sourced claim chart, and get a neutral 35 U.S.C. §103 obviousness evaluation for each claim. The examiner records their own determination. Analysis runs through **Grok** via the [xAI API](https://docs.x.ai).
 
@@ -15,10 +48,18 @@ If you previously stored an `xai-…` key in `AI_GATEWAY_API_KEY`, it still work
 
 ## Demo flow
 
+**Obviousness Workspace** (`/examiner`):
+
 1. **Load sample case** — fictional thermal-management charging application with Smith and Chen references
 2. **Propose limitation split** — edit limitations, then **Map prior art**
 3. Agree or disagree with each chart mapping, choose a base reference, then **Evaluate obviousness**
 4. Each claim gets an AI finding (obviousness supported, not supported, or record incomplete) with a confidence level. Record your own determination per claim, edit or revise the Graham-factor sections, then copy or download
+
+**Readiness Check** (`/readiness`):
+
+1. Select a test application from the list
+2. View automated formalities report with flags and citations
+3. See precision/recall metrics via `npm run eval`
 
 Session text is sent to xAI for the session only; nothing is persisted server-side.
 

@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-10-22T20:21:38.017Z",
+  "modelVersion": "grok-4-1-fast-reasoning",
+  "promptVersion": "v1.0",
+  "totalApplications": 50,
+  "overallMetrics": {
+    "precision": 1,
+    "recall": 0.9152542372881356,
+    "f1Score": 0.9557522123893806
+  },
+  "perDefectMetrics": [
+    {
+      "defectType": "abstract_length",
+      "truePositives": 15,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "defectType": "claim_numbering",
+      "truePositives": 15,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "defectType": "claim_form",
+      "truePositives": 11,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "defectType": "drawing_reference",
+      "truePositives": 8,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "defectType": "page_numbering",
+      "truePositives": 5,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "defectType": "antecedent_basis",
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 5,
+      "precision": 0,
+      "recall": 0,
+      "f1Score": 0
+    }
+  ],
+  "falsePositiveExamples": []
+}
