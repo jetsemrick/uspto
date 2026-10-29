@@ -1,0 +1,160 @@
+/* Federal Demo Design System (FDDS) v0.1 — tokens.css
+ * NDS-inspired tokens for SpaceXAI vendor prototypes. Not an official U.S. government design system.
+ * Generated from tokens.json. Fonts (all OFL, Google Fonts):
+ * <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ * <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+ */
+:root {
+  --fd-color-ink: #0A0A0A;
+  --fd-color-ink-2: #3A3A3A;
+  --fd-color-muted: #5C5C5C;
+  --fd-color-control: #767676;
+  --fd-color-line: #D4D4D4;
+  --fd-color-line-subtle: #E8E8E8;
+  --fd-color-paper: #F2F2F2;
+  --fd-color-surface: #FFFFFF;
+  --fd-color-parchment: #F3F0D6;
+  --fd-color-night: #0A0A0A;
+  --fd-color-night-2: #141414;
+  --fd-color-navy: #0B2A66;
+  --fd-color-navy-tint: #E8EEFA;
+  --fd-color-blue: #2A4FD1;
+  --fd-color-blue-on-dark: #8FB0FF;
+  --fd-color-red: #B0121D;
+  --fd-color-red-tint: #FDECEC;
+  --fd-color-signal: #EB4F27;
+  --fd-color-signal-text: #C2410C;
+  --fd-color-green: #1B6B3A;
+  --fd-color-green-tint: #EAF5EE;
+  --fd-color-amber: #7A4D00;
+  --fd-color-amber-tint: #FFF4D6;
+  --fd-color-amber-line: #E5A800;
+  --fd-color-teal: #0E7C86;
+  --fd-viz-1: #0B2A66;
+  --fd-viz-2: #2A4FD1;
+  --fd-viz-3: #EB4F27;
+  --fd-viz-4: #0E7C86;
+  --fd-viz-5: #767676;
+  --fd-font-display: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --fd-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --fd-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fd-font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --fd-weight-regular: 400;
+  --fd-weight-medium: 500;
+  --fd-weight-semibold: 600;
+  --fd-weight-bold: 700;
+  --fd-text-xs: 0.75rem;
+  --fd-leading-xs: 1rem;
+  --fd-text-sm: 0.875rem;
+  --fd-leading-sm: 1.25rem;
+  --fd-text-base: 1rem;
+  --fd-leading-base: 1.5rem;
+  --fd-text-lg: 1.125rem;
+  --fd-leading-lg: 1.75rem;
+  --fd-text-xl: 1.25rem;
+  --fd-leading-xl: 1.75rem;
+  --fd-text-2xl: 1.5rem;
+  --fd-leading-2xl: 2rem;
+  --fd-text-3xl: 2rem;
+  --fd-leading-3xl: 2.375rem;
+  --fd-text-4xl: 2.5rem;
+  --fd-leading-4xl: 2.75rem;
+  --fd-text-5xl: 3.5rem;
+  --fd-leading-5xl: 3.75rem;
+  --fd-text-6xl: 4.5rem;
+  --fd-leading-6xl: 4.5rem;
+  --fd-text-7xl: 6rem;
+  --fd-leading-7xl: 5.75rem;
+  --fd-tracking-display: -0.035em;
+  --fd-tracking-heading: -0.02em;
+  --fd-tracking-body: 0em;
+  --fd-tracking-label: 0.08em;
+  --fd-space-0: 0;
+  --fd-space-1: 0.25rem;
+  --fd-space-2: 0.5rem;
+  --fd-space-3: 0.75rem;
+  --fd-space-4: 1rem;
+  --fd-space-5: 1.5rem;
+  --fd-space-6: 2rem;
+  --fd-space-7: 3rem;
+  --fd-space-8: 4rem;
+  --fd-space-9: 6rem;
+  --fd-space-10: 8rem;
+  --fd-radius-none: 0;
+  --fd-radius-sm: 2px;
+  --fd-radius-md: 4px;
+  --fd-radius-pill: 999px;
+  --fd-shadow-overlay: 0 1px 2px rgba(10,10,10,0.06), 0 12px 32px rgba(10,10,10,0.12);
+  --fd-shadow-focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #2A4FD1;
+  --fd-bp-sm: 640px; /* reference only; media queries can't read vars */
+  --fd-bp-md: 768px; /* reference only; media queries can't read vars */
+  --fd-bp-lg: 1024px; /* reference only; media queries can't read vars */
+  --fd-bp-xl: 1280px; /* reference only; media queries can't read vars */
+  --fd-bp-2xl: 1440px; /* reference only; media queries can't read vars */
+  --fd-container: 80rem;
+  --fd-gutter: 1.5rem;
+  --fd-gutter-lg: 3rem;
+  --fd-measure: 68ch;
+  --fd-columns: 12;
+  --fd-header-height: 4rem;
+  --fd-target-min: 2.75rem;
+  --fd-motion-fast: 150ms;
+  --fd-motion-base: 250ms;
+  --fd-motion-slow: 400ms;
+  --fd-motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --fd-motion-ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+  /* Semantic aliases — use these in components */
+  --fd-bg: var(--fd-color-paper);
+  --fd-bg-raised: var(--fd-color-surface);
+  --fd-fg: var(--fd-color-ink);
+  --fd-fg-2: var(--fd-color-ink-2);
+  --fd-fg-muted: var(--fd-color-muted);
+  --fd-border: var(--fd-color-line);
+  --fd-border-control: var(--fd-color-control);
+  --fd-primary: var(--fd-color-navy);
+  --fd-primary-fg: #FFFFFF;
+  --fd-link: var(--fd-color-blue);
+  --fd-focus: var(--fd-color-blue);
+}
+
+/* Optional themes: put on <html> or a section */
+[data-fd-theme="parchment"] { --fd-bg: var(--fd-color-parchment); }
+[data-fd-theme="night"] {
+  --fd-bg: var(--fd-color-night);
+  --fd-bg-raised: var(--fd-color-night-2);
+  --fd-fg: #F2F2F2;
+  --fd-fg-2: #D4D4D4;
+  --fd-fg-muted: #A3A3A3;
+  --fd-border: #2A2A2A;
+  --fd-border-control: #8A8A8A;
+  --fd-primary: #F2F2F2;
+  --fd-primary-fg: #0A0A0A;
+  --fd-link: var(--fd-color-blue-on-dark);
+  --fd-focus: var(--fd-color-blue-on-dark);
+}
+
+/* Base */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--fd-bg); color: var(--fd-fg);
+  font-family: var(--fd-font-sans); font-size: var(--fd-text-base); line-height: var(--fd-leading-base);
+  font-feature-settings: "cv11", "ss01"; -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: var(--fd-font-display); font-weight: var(--fd-weight-semibold); letter-spacing: var(--fd-tracking-heading); margin: 0; color: var(--fd-fg); text-wrap: balance; }
+a { color: var(--fd-link); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--fd-focus); outline-offset: 2px; border-radius: 2px; }
+table { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+
+/* Utility classes used by example.html */
+.fd-container { max-width: var(--fd-container); margin-inline: auto; padding-inline: var(--fd-gutter); }
+@media (min-width: 1024px) { .fd-container { padding-inline: var(--fd-gutter-lg); } }
+.fd-label { font-family: var(--fd-font-mono); font-size: var(--fd-text-xs); line-height: var(--fd-leading-xs); font-weight: var(--fd-weight-medium); letter-spacing: var(--fd-tracking-label); text-transform: uppercase; color: var(--fd-fg-muted); }
+.fd-display { font-family: var(--fd-font-display); font-weight: var(--fd-weight-semibold); letter-spacing: var(--fd-tracking-display); line-height: 0.98; }
+.fd-accent { font-family: var(--fd-font-serif); font-style: italic; font-weight: 400; letter-spacing: 0; }
+.fd-skip { position: absolute; left: -9999px; top: 0; }
+.fd-skip:focus { left: var(--fd-space-4); top: var(--fd-space-4); z-index: 100; background: var(--fd-color-ink); color: #fff; padding: var(--fd-space-2) var(--fd-space-4); border-radius: var(--fd-radius-md); }
+.fd-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }

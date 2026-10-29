@@ -1,28 +1,108 @@
-# USPTO §103 examiner workspace
+# Patent Readiness Studio
 
-Desktop demo for patent examiners: load an application and prior-art references, confirm a limitation split, review a sourced claim chart, and get a neutral 35 U.S.C. §103 obviousness evaluation for each claim. The examiner records their own determination. Analysis runs through **Grok** via the [xAI API](https://docs.x.ai).
+USPTO demo app for the Nov 10, 2026 roundtable: readiness checks for applicants, examiner review tools, and evaluation metrics. One engine, three views.
 
-## Setup
+## Quick Start
 
-1. Install dependencies: `npm install`
-2. Copy `.env.example` to `.env.local` and set:
-   - `XAI_API_KEY` — from [console.x.ai](https://console.x.ai)
-   - `XAI_MODEL` (optional) — e.g. `grok-4-1-fast-reasoning`, `grok-4.6`
-   - `XAI_REASONING_EFFORT` (optional) — `none`, `low`, `medium`, or `high` for every step. By default the limitation split, chart, and revisions use `low` and the evaluation uses `medium`. Higher effort is slower: a chart at Grok 4.6's default effort took over three minutes, versus about 30 seconds at `low`.
-3. Run: `npm run dev`
+```bash
+npm install
+npm run dev
+```
 
-If you previously stored an `xai-…` key in `AI_GATEWAY_API_KEY`, it still works until you move it to `XAI_API_KEY`.
+Open [http://localhost:3000](http://localhost:3000) — you'll see the **Patent Readiness Studio** with three tabs:
 
-## Demo flow
+1. **Applicant** — Readiness report with findings (missing parts, 35 USC 112 issues, formalities)
+2. **Examiner** — Finding queue, claim-support map, what-if panel, traceability
+3. **Evaluation** — Precision, recall, false positives, regression gate
 
-1. **Load sample case** — fictional thermal-management charging application with Smith and Chen references
-2. **Propose limitation split** — edit limitations, then **Map prior art**
-3. Agree or disagree with each chart mapping, choose a base reference, then **Evaluate obviousness**
-4. Each claim gets an AI finding (obviousness supported, not supported, or record incomplete) with a confidence level. Record your own determination per claim, edit or revise the Graham-factor sections, then copy or download
+The app loads a demo application (19/482,317, soil moisture sensor) with 7 findings.
 
-Session text is sent to xAI for the session only; nothing is persisted server-side.
+## Tests & Evaluation
 
-## Troubleshooting
+```bash
+# Run tests
+npx tsx src/__tests__/studio.test.ts
 
-- **Authentication errors** — Confirm `XAI_API_KEY`, restart `npm run dev` after editing `.env.local`.
-- **Empty / type validation errors** — Usually an invalid key or model id; check the red banner for the plain-text API error.
+# Run evaluation
+npx tsx src/eval/evaluate.ts
+```
+
+The eval script computes precision, recall, and override rate against a ground truth test set.
+
+## Demo Path
+
+1. Start on **Applicant** tab → see readiness report with 3 Must fix, 2 Should fix, 1 Advisory
+2. Switch to **Examiner** tab → queue shows findings sorted by severity
+3. Click "Open what-if on claim 14" → edit claim 14(c) and watch findings resolve
+4. Go back → see claim-support map showing gap in claim 14(c)
+5. Switch to **Evaluation** tab → precision 0.91, recall 0.88, regression runs
+
+## Key Features
+
+- **No API key required** — Runs with cached model outputs for the demo applications
+- **Deterministic + Model checks** — Rules for mechanical issues, Grok (via xAI API) for judgment checks when `XAI_API_KEY` is set
+- **Traceability** — Every finding has check ID, model version, prompt version, confidence, and audit trail
+- **What-if** — Edit claims and see findings update in real time
+- **Section 508 / WCAG AA** — 17px base font, 2px rules, shape + word + color for severity
+
+## Deploying with xAI Grok
+
+For production checks beyond the demo:
+
+1. Set `XAI_API_KEY` in `.env.local` (from [console.x.ai](https://console.x.ai))
+2. Set `XAI_MODEL` (optional) — e.g., `grok-4-1-fast-reasoning`, `grok-4.6`
+3. The app will call Grok for model-based checks and cache responses
+
+In AWS GovCloud:
+- Run Grok via Amazon Bedrock
+- Each check endpoint is stateless and can be deployed as a Lambda function
+- DOCX parsing runs server-side
+
+## Files
+
+- `src/app/studio/` — Main app with three tabs
+- `src/components/studio/` — Tab components (Applicant, Examiner, Evaluation, WhatIf)
+- `src/lib/studio/demo-application.ts` — Demo data (application 19/482,317 + findings)
+- `src/lib/types/studio.ts` — Type definitions
+- `src/__tests__/studio.test.ts` — Tests
+- `src/eval/evaluate.ts` — Evaluation script
+- `public/css/` — Design system CSS (tokens, components, USPTO layer)
+
+## Artifacts
+
+Generated during demo recording:
+- `recording_demo.mp4` — 2-4 minute screen recording following the demo path
+- Screenshots in artifacts folder — key screens from each tab
+
+## What's Real vs. Cached
+
+- **Real**: All UI, routing, state management, claim editing, decision recording
+- **Cached/Stubbed**: Model responses for demo application (no API key needed), upload/download buttons
+
+## Architecture
+
+Each check runs as a stateless function:
+- **Input**: Parsed application (claims, spec, drawings)
+- **Output**: Findings with confidence, evidence, citations, suggested fixes
+- **Rules-based checks**: Deterministic (claim numbering, abstract length, etc.)
+- **Model checks**: Grok API with structured JSON output (antecedent basis, claim support, etc.)
+
+Production path:
+1. Upload DOCX
+2. Parse to structured JSON
+3. Run checks in parallel
+4. Return findings
+5. Examiner reviews, accepts, or overrides
+6. Decisions are logged and feed back into eval
+
+## Notes for USPTO
+
+- Citations (MPEP/CFR) need practitioner review (shown in UI)
+- Findings are suggestions, not Office actions (shown in applicant view)
+- Evaluation uses a seeded test set with answer key written before checks run
+- Override rate (8% in pilot) shown next to precision
+- One blocked run (R-1041) in regression history shows the gate working
+
+## License
+
+Vendor prototype for USPTO evaluation. Not an official U.S. government product. Synthetic data only.
