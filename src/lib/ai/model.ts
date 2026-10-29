@@ -5,26 +5,38 @@ const DEFAULT_GROK_MODEL = "grok-4-1-fast-reasoning";
 
 let cachedProvider: XaiProvider | null = null;
 
-/** xAI API key from XAI_API_KEY, or legacy AI_GATEWAY_API_KEY if it is an xai- key. */
-export function getXaiApiKey(): string {
-  const primary = process.env.XAI_API_KEY?.trim();
+function findXaiApiKey(): string | undefined {
+  const primary = process.env.X_AI_KEY?.trim() || process.env.XAI_API_KEY?.trim();
   if (primary) return primary;
 
   const legacy = process.env.AI_GATEWAY_API_KEY?.trim();
   if (legacy?.startsWith("xai-")) return legacy;
 
+  return undefined;
+}
+
+/** xAI API key from X_AI_KEY or XAI_API_KEY, or legacy AI_GATEWAY_API_KEY if it is an xai- key. */
+export function getXaiApiKey(): string {
+  const key = findXaiApiKey();
+  if (key) return key;
+
   throw new Error(
-    "Set XAI_API_KEY in .env.local with your Grok API key from https://console.x.ai",
+    "Set X_AI_KEY in .env.local with your Grok API key from https://console.x.ai",
   );
+}
+
+export function hasXaiApiKey(): boolean {
+  return Boolean(findXaiApiKey());
 }
 
 export function getGrokModelId(): string {
   const fromEnv =
-    process.env.XAI_MODEL?.trim() || process.env.AI_GATEWAY_MODEL?.trim();
+    process.env.X_AI_MODEL?.trim() ||
+    process.env.XAI_MODEL?.trim() ||
+    process.env.AI_GATEWAY_MODEL?.trim();
   if (!fromEnv) return DEFAULT_GROK_MODEL;
   // Allow users who still have gateway-style ids in env
-  const normalized = fromEnv.replace(/^spacexai\//i, "");
-  return normalized;
+  return fromEnv.replace(/^(spacexai|xai)\//i, "");
 }
 
 function getXaiProvider(): XaiProvider {

@@ -1,5 +1,5 @@
-import { ExaminerWorkspace } from "@/components/workspace/ExaminerWorkspace";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return <ExaminerWorkspace />;
+export default function HomePage() {
+  redirect("/studio");
 }
