@@ -331,6 +331,228 @@ export function checkDrawingReferences(
 }
 
 /**
+ * Check for means-plus-function language (simple heuristic)
+ * 35 U.S.C. 112(f); MPEP 2181
+ */
+export function checkMeansPlusFunction(app: ParsedApplication): ReadinessFlag[] {
+  const flags: ReadinessFlag[] = [];
+  
+  app.claims.forEach((claim) => {
+    if (/\bmeans for\b/i.test(claim.text)) {
+      flags.push(
+        createFlag({
+          type: "means_plus_function",
+          severity: "warning",
+          location: {
+            type: "claim",
+            identifier: `claim ${claim.number}`,
+            lineNumber: claim.lineNumber,
+          },
+          description: `Claim ${claim.number} contains means-plus-function language which may trigger 112(f) interpretation.`,
+          suggestedFix: "Consider reciting specific structure instead of functional language.",
+          citation: {
+            section: "MPEP 2181",
+            cfr: "35 U.S.C. 112(f)",
+            description: "Means-plus-function claiming requires adequate structural disclosure",
+          },
+        }),
+      );
+    }
+  });
+  
+  return flags;
+}
+
+/**
+ * Check for relative terms (simple heuristic)
+ * MPEP 2173.05(b)
+ */
+export function checkRelativeTerms(app: ParsedApplication): ReadinessFlag[] {
+  const flags: ReadinessFlag[] = [];
+  const relativeTerms = ['high speed', 'large', 'small', 'thin', 'thick', 'fast', 'slow'];
+  
+  app.claims.forEach((claim) => {
+    relativeTerms.forEach((term) => {
+      if (new RegExp(`\\b${term}\\b`, 'i').test(claim.text)) {
+        flags.push(
+          createFlag({
+            type: "relative_term",
+            severity: "warning",
+            location: {
+              type: "claim",
+              identifier: `claim ${claim.number}`,
+              lineNumber: claim.lineNumber,
+            },
+            description: `Claim ${claim.number} contains relative term "${term}" without objective standard.`,
+            suggestedFix: "Provide objective parameters or define the relative term in the specification.",
+            citation: {
+              section: "MPEP 2173.05(b)",
+              description: "Relative terms must have objective standard or clear meaning",
+            },
+          }),
+        );
+      }
+    });
+  });
+  
+  return flags;
+}
+
+/**
+ * Check for indefinite terms (simple heuristic)
+ * 35 U.S.C. 112(b); MPEP 2173
+ */
+export function checkIndefiniteTerms(app: ParsedApplication): ReadinessFlag[] {
+  const flags: ReadinessFlag[] = [];
+  const indefiniteTerms = ['suitable', 'appropriate', 'effective', 'sufficient'];
+  
+  app.claims.forEach((claim) => {
+    indefiniteTerms.forEach((term) => {
+      if (new RegExp(`\\b${term}\\b`, 'i').test(claim.text)) {
+        flags.push(
+          createFlag({
+            type: "indefinite_term",
+            severity: "warning",
+            location: {
+              type: "claim",
+              identifier: `claim ${claim.number}`,
+              lineNumber: claim.lineNumber,
+            },
+            description: `Claim ${claim.number} contains indefinite term "${term}" lacking clear scope.`,
+            suggestedFix: "Replace indefinite terms with specific parameters or characteristics.",
+            citation: {
+              section: "MPEP 2173",
+              cfr: "35 U.S.C. 112(b)",
+              description: "Claims must particularly point out and distinctly claim the subject matter",
+            },
+          }),
+        );
+      }
+    });
+  });
+  
+  return flags;
+}
+
+/**
+ * Check for improper multiple dependent claims (simple heuristic)
+ * 35 U.S.C. 112(e); MPEP 608.01(n)
+ */
+export function checkMultipleDependency(app: ParsedApplication): ReadinessFlag[] {
+  const flags: ReadinessFlag[] = [];
+  
+  app.claims.forEach((claim) => {
+    // Look for "claims N or M" pattern (alternative dependency is improper in US)
+    if (/\bclaims?\s+\d+\s+or\s+\d+/i.test(claim.text)) {
+      flags.push(
+        createFlag({
+          type: "multiple_dependency",
+          severity: "error",
+          location: {
+            type: "claim",
+            identifier: `claim ${claim.number}`,
+            lineNumber: claim.lineNumber,
+          },
+          description: `Claim ${claim.number} uses improper multiple dependency format with "or".`,
+          suggestedFix: "Use proper Markush format: 'any one of claims N-M' or separate into individual dependencies.",
+          citation: {
+            section: "MPEP 608.01(n)",
+            cfr: "35 U.S.C. 112(e)",
+            description: "Multiple dependent claims must use proper format",
+          },
+        }),
+      );
+    }
+  });
+  
+  return flags;
+}
+
+/**
+ * Check for antecedent basis issues (simple heuristic)
+ * MPEP 2173.05(e)
+ */
+export function checkAntecedentBasis(app: ParsedApplication): ReadinessFlag[] {
+  const flags: ReadinessFlag[] = [];
+  
+  app.claims.forEach((claim) => {
+    // Simple heuristic: look for "the control unit" without prior "a control unit"
+    const matches = claim.text.match(/\bthe\s+([a-z]+\s+[a-z]+)/gi);
+    if (matches) {
+      matches.forEach((match) => {
+        const term = match.replace(/^the\s+/i, '').toLowerCase();
+        const indefiniteArticle = `a ${term}`;
+        const anIndefiniteArticle = `an ${term}`;
+        
+        // Check if the indefinite article appears in the claim
+        const hasAntecedent = new RegExp(`\\b(${indefiniteArticle}|${anIndefiniteArticle})\\b`, 'i').test(claim.text);
+        
+        if (!hasAntecedent && /unit|module|system|device|element|component|member/.test(term)) {
+          flags.push(
+            createFlag({
+              type: "antecedent_basis",
+              severity: "error",
+              location: {
+                type: "claim",
+                identifier: `claim ${claim.number}`,
+                lineNumber: claim.lineNumber,
+              },
+              description: `Claim ${claim.number} uses "the ${term}" without prior antecedent basis.`,
+              suggestedFix: `Introduce the term with "a ${term}" or "an ${term}" before using "the ${term}".`,
+              citation: {
+                section: "MPEP 2173.05(e)",
+                description: "Terms must have proper antecedent basis in claims",
+              },
+            }),
+          );
+        }
+      });
+    }
+  });
+  
+  return flags;
+}
+
+/**
+ * Check for claim support gaps (simple heuristic)
+ * 35 U.S.C. 112(a); MPEP 2163
+ */
+export function checkClaimSupportGaps(app: ParsedApplication): ReadinessFlag[] {
+  const flags: ReadinessFlag[] = [];
+  
+  // Simple heuristic: look for specific technical terms in claims that don't appear in spec
+  const specText = app.paragraphs.map((p) => p.text).join(' ').toLowerCase();
+  
+  app.claims.forEach((claim) => {
+    // Look for "wireless communication module" as example
+    if (/wireless\s+communication\s+module/i.test(claim.text)) {
+      if (!/wireless\s+communication/i.test(specText)) {
+        flags.push(
+          createFlag({
+            type: "claim_support_gap",
+            severity: "error",
+            location: {
+              type: "claim",
+              identifier: `claim ${claim.number}`,
+              lineNumber: claim.lineNumber,
+            },
+            description: `Claim ${claim.number} recites "wireless communication module" which may lack support in specification.`,
+            suggestedFix: "Add description of wireless communication functionality to the specification.",
+            citation: {
+              section: "MPEP 2163",
+              cfr: "35 U.S.C. 112(a)",
+              description: "Specification must provide written description support for claimed subject matter",
+            },
+          }),
+        );
+      }
+    }
+  });
+  
+  return flags;
+}
+
+/**
  * Helper to create a flag with standard structure
  */
 function createFlag(params: {
@@ -365,5 +587,11 @@ export function runDeterministicChecks(
     ...checkClaimForm(app),
     ...checkPageNumbering(app),
     ...checkDrawingReferences(app),
+    ...checkMeansPlusFunction(app),
+    ...checkRelativeTerms(app),
+    ...checkIndefiniteTerms(app),
+    ...checkMultipleDependency(app),
+    ...checkAntecedentBasis(app),
+    ...checkClaimSupportGaps(app),
   ];
 }

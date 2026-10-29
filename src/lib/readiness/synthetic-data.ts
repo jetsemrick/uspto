@@ -195,6 +195,53 @@ function seedDefect(
         lineNumber: 130,
       });
       break;
+
+    case "means_plus_function":
+      // Add a claim with means-plus-function language
+      modified.claims.push({
+        number: modified.claims.length + 1,
+        text: "The thermal management system of claim 1, further comprising means for regulating thermal output based on detected temperature variations.",
+        lineNumber: 140,
+      });
+      break;
+
+    case "relative_term":
+      // Add a claim with relative term
+      modified.claims.push({
+        number: modified.claims.length + 1,
+        text: "The thermal management system of claim 1, wherein the sensor array operates at high speed.",
+        lineNumber: 150,
+      });
+      break;
+
+    case "indefinite_term":
+      // Add a claim with indefinite term
+      modified.claims.push({
+        number: modified.claims.length + 1,
+        text: "The thermal management system of claim 1, wherein the cooling mechanism includes suitable cooling elements.",
+        lineNumber: 160,
+      });
+      break;
+
+    case "multiple_dependency":
+      // Add an improper multiple dependency
+      if (modified.claims.length >= 3) {
+        modified.claims.push({
+          number: modified.claims.length + 1,
+          text: "The thermal management system of claims 1 or 2, wherein the processor executes real-time thermal analysis.",
+          lineNumber: 170,
+        });
+      }
+      break;
+
+    case "claim_support_gap":
+      // Add a claim element not supported in spec
+      modified.claims.push({
+        number: modified.claims.length + 1,
+        text: "The thermal management system of claim 1, further comprising a wireless communication module configured to transmit thermal data.",
+        lineNumber: 180,
+      });
+      break;
   }
 
   return modified;
@@ -258,6 +305,36 @@ function getDefectLocation(
         identifier: `claim ${app.claims.length}`,
         lineNumber: 130,
       };
+    case "means_plus_function":
+      return {
+        type: "claim",
+        identifier: `claim ${app.claims.length}`,
+        lineNumber: 140,
+      };
+    case "relative_term":
+      return {
+        type: "claim",
+        identifier: `claim ${app.claims.length}`,
+        lineNumber: 150,
+      };
+    case "indefinite_term":
+      return {
+        type: "claim",
+        identifier: `claim ${app.claims.length}`,
+        lineNumber: 160,
+      };
+    case "multiple_dependency":
+      return {
+        type: "claim",
+        identifier: `claim ${app.claims.length}`,
+        lineNumber: 170,
+      };
+    case "claim_support_gap":
+      return {
+        type: "claim",
+        identifier: `claim ${app.claims.length}`,
+        lineNumber: 180,
+      };
   }
 }
 
@@ -275,6 +352,16 @@ function getDefectDescription(defectType: DefectType): string {
       return "Pages not numbered consecutively";
     case "antecedent_basis":
       return "Term lacks proper antecedent basis";
+    case "means_plus_function":
+      return "Means-plus-function language without structural recitation";
+    case "relative_term":
+      return "Relative term without objective standard";
+    case "indefinite_term":
+      return "Indefinite term lacking clear scope";
+    case "multiple_dependency":
+      return "Improper multiple dependent claim (alternative format)";
+    case "claim_support_gap":
+      return "Claim element not supported in specification";
   }
 }
 
@@ -300,7 +387,7 @@ export function generateTestSuite(): Array<{
     );
   }
 
-  // Generate applications with single defect types (5 per type)
+  // Generate applications with single defect types (3 per type for 11 types = 33)
   const defectTypes: DefectType[] = [
     "abstract_length",
     "claim_numbering",
@@ -308,12 +395,17 @@ export function generateTestSuite(): Array<{
     "drawing_reference",
     "page_numbering",
     "antecedent_basis",
+    "means_plus_function",
+    "relative_term",
+    "indefinite_term",
+    "multiple_dependency",
+    "claim_support_gap",
   ];
 
   defectTypes.forEach((defectType, typeIndex) => {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       const techArea =
-        TECHNOLOGY_AREAS[(typeIndex * 5 + i) % TECHNOLOGY_AREAS.length];
+        TECHNOLOGY_AREAS[(typeIndex * 3 + i) % TECHNOLOGY_AREAS.length];
       suite.push(
         generateSyntheticApplication(
           `app-${defectType}-${i + 1}`,

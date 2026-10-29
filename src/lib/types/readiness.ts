@@ -10,7 +10,12 @@ export type DefectType =
   | "claim_form"
   | "drawing_reference"
   | "page_numbering"
-  | "abstract_length";
+  | "abstract_length"
+  | "means_plus_function"
+  | "relative_term"
+  | "indefinite_term"
+  | "multiple_dependency"
+  | "claim_support_gap";
 
 export interface DefectLocation {
   type: "paragraph" | "claim" | "figure" | "abstract" | "page";

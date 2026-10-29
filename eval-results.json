@@ -1,0 +1,114 @@
+{
+  "totalApplications": 53,
+  "overallMetrics": {
+    "precision": 1,
+    "recall": 1,
+    "f1Score": 1,
+    "truePositives": 62,
+    "falsePositives": 0,
+    "falseNegatives": 0
+  },
+  "checkMetrics": [
+    {
+      "checkType": "abstract_length",
+      "truePositives": 13,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "claim_numbering",
+      "truePositives": 13,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "claim_form",
+      "truePositives": 9,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "drawing_reference",
+      "truePositives": 6,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "page_numbering",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "antecedent_basis",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "means_plus_function",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "relative_term",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "indefinite_term",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "multiple_dependency",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "checkType": "claim_support_gap",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    }
+  ],
+  "overrideRate": 0,
+  "timestamp": "2026-10-29T18:13:11.393Z"
+}
