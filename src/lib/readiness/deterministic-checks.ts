@@ -13,6 +13,7 @@ import { randomUUID } from "crypto";
 
 export interface ParsedApplication {
   applicationId: string;
+  title?: string;
   abstract?: string;
   claims: Array<{ number: number; text: string; lineNumber: number }>;
   paragraphs: Array<{ number: string; text: string; lineNumber: number }>;

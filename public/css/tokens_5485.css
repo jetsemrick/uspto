@@ -2,7 +2,7 @@
  * NDS-inspired tokens for SpaceXAI vendor prototypes. Not an official U.S. government design system.
  * Generated from tokens.json. Fonts (all OFL, Google Fonts):
  * <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- * <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+ * <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
  */
 :root {
   --fd-color-ink: #0A0A0A;
@@ -35,8 +35,8 @@
   --fd-viz-3: #EB4F27;
   --fd-viz-4: #0E7C86;
   --fd-viz-5: #767676;
-  --fd-font-display: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-  --fd-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --fd-font-display: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --fd-font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --fd-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --fd-font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --fd-weight-regular: 400;

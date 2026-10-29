@@ -59,7 +59,13 @@ export interface Application {
   specification: Array<{ number: string; text: string }>;
   claims: Array<{ number: number; text: string; elements?: ClaimElement[] }>;
   drawings: string[]; // ["FIG. 1", "FIG. 2", ...]
-  inventorDeclaration: boolean;
+  inventorDeclaration: boolean | null; // null when the source can't show it, e.g. a DOCX upload
+  sourceFile?: string; // set for applicant uploads
+}
+
+export interface ModelCheck {
+  status: "used" | "failed" | "off";
+  model: string;
 }
 
 export interface ReadinessReport {
@@ -71,6 +77,7 @@ export interface ReadinessReport {
     shouldFix: number;
     advisory: number;
   };
+  modelCheck?: ModelCheck;
 }
 
 export interface EvalCheck {

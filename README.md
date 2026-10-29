@@ -40,7 +40,7 @@ The eval script computes precision, recall, and override rate against a ground t
 ## Key Features
 
 - **No API key required** — Runs with cached model outputs for the demo applications
-- **Deterministic + Model checks** — Rules for mechanical issues, Grok (via xAI API) for judgment checks when `XAI_API_KEY` is set
+- **Deterministic + Model checks** — Rules for mechanical issues, Grok (via xAI API) for judgment checks when `X_AI_KEY` is set
 - **Traceability** — Every finding has check ID, model version, prompt version, confidence, and audit trail
 - **What-if** — Edit claims and see findings update in real time
 - **Section 508 / WCAG AA** — 17px base font, 2px rules, shape + word + color for severity
@@ -49,9 +49,9 @@ The eval script computes precision, recall, and override rate against a ground t
 
 For production checks beyond the demo:
 
-1. Set `XAI_API_KEY` in `.env.local` (from [console.x.ai](https://console.x.ai))
-2. Set `XAI_MODEL` (optional) — e.g., `grok-4-1-fast-reasoning`, `grok-4.6`
-3. The app will call Grok for model-based checks and cache responses
+1. Set `X_AI_KEY` in `.env.local` (from [console.x.ai](https://console.x.ai)). `XAI_API_KEY` is still accepted.
+2. Set `X_AI_MODEL` (optional) — e.g., `grok-4.7`, `grok-4-1-fast-reasoning`. `XAI_MODEL` is still accepted.
+3. The §103 workspace and uploaded DOCX checks call Grok for model-based checks. Without a key, uploads fall back to rule checks.
 
 In AWS GovCloud:
 - Run Grok via Amazon Bedrock

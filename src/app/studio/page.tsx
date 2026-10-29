@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import { demoApplication, demoFindings, claim14SupportMap } from "@/lib/studio/demo-application";
-import type { Application, Finding, Decision, WhatIfResult } from "@/lib/types/studio";
+import { summarizeFindings } from "@/lib/studio/from-readiness";
+import type { Application, Finding, Decision, ReadinessReport } from "@/lib/types/studio";
 import ApplicantTab from "@/components/studio/ApplicantTab";
 import ExaminerTab from "@/components/studio/ExaminerTab";
 import EvaluationTab from "@/components/studio/EvaluationTab";
+import { DropOverlay, UploadButton } from "@/components/studio/DocumentUpload";
+import { useDocumentCheck } from "@/components/studio/useDocumentCheck";
 
 type Tab = "applicant" | "examiner" | "evaluation";
 
@@ -13,6 +16,8 @@ export default function StudioPage() {
   const [activeTab, setActiveTab] = useState<Tab>("applicant");
   const [application] = useState<Application>(demoApplication);
   const [findings, setFindings] = useState<Finding[]>(demoFindings);
+  const [upload, setUpload] = useState<ReadinessReport | null>(null);
+  const check = useDocumentCheck(setUpload);
 
   const handleDecision = (findingId: string, decision: Decision) => {
     setFindings((prev) =>
@@ -20,12 +25,8 @@ export default function StudioPage() {
     );
   };
 
-  const summary = {
-    total: findings.length,
-    mustFix: findings.filter((f) => f.severity === "must-fix").length,
-    shouldFix: findings.filter((f) => f.severity === "should-fix").length,
-    advisory: findings.filter((f) => f.severity === "advisory").length,
-  };
+  const summary = summarizeFindings(findings);
+  const headerApplication = activeTab === "applicant" && upload ? upload.application : application;
 
   return (
     <>
@@ -43,13 +44,13 @@ export default function StudioPage() {
       </div>
       <header className="fd-header">
         <div className="app">
-          <a className="fd-brand" href="#" aria-label="Readiness home">
+          <a className="fd-brand" href="#" aria-label="USPTO home">
             <span className="fd-brand__mark" aria-hidden="true">
               <span></span>
               <span></span>
               <span></span>
             </span>
-            Readiness
+            USPTO
           </a>
           <nav className="fd-nav" aria-label="Primary">
             <a
@@ -85,23 +86,44 @@ export default function StudioPage() {
           </nav>
           <div className="ctx">
             <span>
-              App <b>{application.id}</b>
+              App <b>{headerApplication.id}</b>
             </span>
             <span>
-              Run <b>{application.runId}</b>
+              Run <b>{headerApplication.runId}</b>
             </span>
             <span>
-              Checks <b>{application.checksVersion}</b>
-            </span>
-            <span className="role">
-              {activeTab === "applicant" ? "Applicant view" : activeTab === "examiner" ? "Examiner view" : "Evaluation"}
+              Checks <b>{headerApplication.checksVersion}</b>
             </span>
           </div>
+          {activeTab === "applicant" && (
+            <div className="hdr-actions">
+              {upload && check.state !== "uploading" && (
+                <button
+                  type="button"
+                  className="fd-btn fd-btn--ghost"
+                  onClick={() => {
+                    check.dismiss();
+                    setUpload(null);
+                  }}
+                >
+                  Back to demo
+                </button>
+              )}
+              <UploadButton check={check} label={upload ? "Upload new version" : "Upload document"} />
+            </div>
+          )}
         </div>
       </header>
+      <DropOverlay check={check} enabled={activeTab === "applicant"} />
       <main id="main" className="app">
         {activeTab === "applicant" && (
-          <ApplicantTab application={application} findings={findings} summary={summary} />
+          <ApplicantTab
+            application={upload?.application ?? application}
+            findings={upload?.findings ?? findings}
+            summary={upload?.summary ?? summary}
+            modelCheck={upload?.modelCheck}
+            check={check}
+          />
         )}
         {activeTab === "examiner" && (
           <ExaminerTab

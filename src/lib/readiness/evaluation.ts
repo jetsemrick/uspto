@@ -11,7 +11,8 @@ import type {
 } from "@/lib/types/readiness";
 import type { ParsedApplication } from "./deterministic-checks";
 import { runDeterministicChecks } from "./deterministic-checks";
-import { checkAntecedentBasisSafe, MODEL_VERSION, PROMPT_VERSION } from "./llm-checks";
+import { checkAntecedentBasisSafe, PROMPT_VERSION } from "./llm-checks";
+import { getGrokModelId } from "@/lib/ai/model";
 import { generateTestSuite } from "./synthetic-data";
 
 /**
@@ -166,7 +167,7 @@ export async function runEvaluation(): Promise<EvaluationReport> {
 
   return {
     timestamp: new Date().toISOString(),
-    modelVersion: MODEL_VERSION,
+    modelVersion: getGrokModelId(),
     promptVersion: PROMPT_VERSION,
     totalApplications: testSuite.length,
     overallMetrics,

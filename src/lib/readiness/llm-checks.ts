@@ -2,80 +2,81 @@
  * LLM-based readiness checks using Grok
  */
 
-import { generateObject } from "ai";
+import { generateText, Output } from "ai";
 import { z } from "zod";
-import { getGrokModel } from "@/lib/ai/model";
+import { getGrokModel, getGrokModelId, hasXaiApiKey, resolveReasoningEffort } from "@/lib/ai/model";
 import type { ParsedApplication } from "./deterministic-checks";
 import type { ReadinessFlag } from "@/lib/types/readiness";
 import { randomUUID } from "crypto";
 
-const MODEL_VERSION = "grok-4-1-fast-reasoning";
-const PROMPT_VERSION = "v1.0";
+const PROMPT_VERSION = "v1.1";
+
+const antecedentSchema = z.object({
+  findings: z.array(
+    z.object({
+      claimNumber: z.number(),
+      hasIssue: z.boolean(),
+      problematicTerm: z.string().nullable(),
+      explanation: z.string(),
+    }),
+  ),
+});
 
 /**
  * Check antecedent basis in claims
  * MPEP 2173.05(e)
+ * Throws if the model call fails; use checkAntecedentBasisSafe to fall back silently.
  */
 export async function checkAntecedentBasis(
   app: ParsedApplication,
 ): Promise<ReadinessFlag[]> {
   const flags: ReadinessFlag[] = [];
 
-  // Only check if we have claims
   if (app.claims.length === 0) {
     return flags;
   }
+
+  const modelVersion = getGrokModelId();
 
   // Batch process claims in groups to avoid token limits
   const batchSize = 10;
   for (let i = 0; i < app.claims.length; i += batchSize) {
     const batch = app.claims.slice(i, i + batchSize);
 
-    try {
-      const result = await generateObject({
-        model: getGrokModel(),
-        schema: z.object({
-          findings: z.array(
-            z.object({
-              claimNumber: z.number(),
-              hasIssue: z.boolean(),
-              problematicTerm: z.string().optional(),
-              explanation: z.string(),
-            }),
-          ),
-        }),
-        prompt: buildAntecedentBasisPrompt(batch),
-      });
+    const { output } = await generateText({
+      model: getGrokModel(),
+      output: Output.object({ schema: antecedentSchema }),
+      prompt: buildAntecedentBasisPrompt(batch, app.claims),
+      providerOptions: {
+        xai: { reasoningEffort: resolveReasoningEffort("low") },
+      },
+    });
 
-      // Convert findings to flags
-      result.object.findings.forEach((finding) => {
-        if (finding.hasIssue && finding.problematicTerm) {
-          const claim = batch.find((c) => c.number === finding.claimNumber);
-          flags.push({
-            id: randomUUID(),
-            type: "antecedent_basis",
-            severity: "error",
-            location: {
-              type: "claim",
-              identifier: `claim ${finding.claimNumber}`,
-              lineNumber: claim?.lineNumber,
-            },
-            description: `Antecedent basis issue in claim ${finding.claimNumber}: "${finding.problematicTerm}". ${finding.explanation}`,
-            suggestedFix: `Ensure "${finding.problematicTerm}" has proper antecedent basis by introducing it as "a ${finding.problematicTerm}" or "an ${finding.problematicTerm}" before referencing it as "the ${finding.problematicTerm}" or "said ${finding.problematicTerm}".`,
-            citation: {
-              section: "MPEP 2173.05(e)",
-              description:
-                "Claims must have proper antecedent basis - terms must be introduced before being referenced",
-            },
-            modelVersion: MODEL_VERSION,
-            promptVersion: PROMPT_VERSION,
-            isDeterministic: false,
-          });
-        }
+    for (const finding of output.findings) {
+      const claim = batch.find((c) => c.number === finding.claimNumber);
+      if (!finding.hasIssue || !finding.problematicTerm || !claim) continue;
+
+      const term = finding.problematicTerm.replace(/^(the|said|such)\s+/i, "");
+      flags.push({
+        id: randomUUID(),
+        type: "antecedent_basis",
+        severity: "error",
+        location: {
+          type: "claim",
+          identifier: `claim ${finding.claimNumber}`,
+          lineNumber: claim.lineNumber,
+        },
+        description: `Claim ${finding.claimNumber} uses "the ${term}" without antecedent basis. ${finding.explanation}`,
+        suggestedFix: `Introduce "a ${term}" earlier in this claim or in the claim it depends on, or change "the ${term}" to "a ${term}".`,
+        citation: {
+          section: "MPEP 2173.05(e)",
+          description:
+            "Claims must have proper antecedent basis - terms must be introduced before being referenced",
+        },
+        modelVersion,
+        promptVersion: PROMPT_VERSION,
+        isDeterministic: false,
       });
-    } catch (error) {
-      console.error("Error checking antecedent basis:", error);
-      // Return empty array for this batch on error
     }
   }
 
@@ -83,9 +84,12 @@ export async function checkAntecedentBasis(
 }
 
 function buildAntecedentBasisPrompt(
-  claims: Array<{ number: number; text: string }>,
+  batch: Array<{ number: number; text: string }>,
+  allClaims: Array<{ number: number; text: string }>,
 ): string {
-  const claimTexts = claims.map((c) => `Claim ${c.number}: ${c.text}`).join("\n\n");
+  const claimTexts = allClaims.map((c) => `Claim ${c.number}: ${c.text}`).join("\n\n");
+  const first = batch[0].number;
+  const last = batch[batch.length - 1].number;
 
   return `You are a USPTO patent examiner checking for antecedent basis issues in patent claims.
 
@@ -93,17 +97,17 @@ RULE: Each term must be properly introduced before it can be referenced. Typical
 - First mention: "a widget" or "an element"
 - Subsequent mentions: "the widget" or "said element"
 
-Check each claim below for antecedent basis issues. Look for terms that are referenced with "the", "said", or "such" without being properly introduced first.
+A dependent claim inherits every term introduced in the claims it depends on, directly or through a chain of dependencies. A term introduced in an earlier claim that is not in the dependency chain does NOT provide antecedent basis.
 
-CLAIMS:
+ALL CLAIMS (for context):
 ${claimTexts}
 
-For each claim, identify if there is an antecedent basis issue. If yes, provide the problematic term and explanation. If no, explain why the claim is acceptable.
+Report on claims ${first} through ${last} only. Return one entry per claim. For a claim with an issue, set hasIssue to true, set problematicTerm to the noun phrase without its article (for example "sensor housing"), and give a one-sentence explanation naming where the term is missing. For a claim with no issue, set hasIssue to false, problematicTerm to null, and explain briefly.
 
-Focus on:
-1. Terms referenced with "the" that were not previously introduced with "a" or "an"
-2. Terms referenced with "said" that were not previously mentioned
-3. Terms that appear in dependent claims but not in the parent claim
+Do not flag:
+- Inherent properties of an introduced element (for example "the surface of a plate")
+- References to the claimed subject itself (for example "The system of claim 1")
+- Terms already introduced in this claim or in any claim it depends on
 
 Be precise and technical in your analysis.`;
 }
@@ -169,11 +173,9 @@ export async function checkAntecedentBasisSafe(
   app: ParsedApplication,
 ): Promise<ReadinessFlag[]> {
   try {
-    // Check if API key is available
-    const apiKey = process.env.XAI_API_KEY;
-    if (!apiKey) {
+    if (!hasXaiApiKey()) {
       console.warn(
-        "XAI_API_KEY not set, skipping antecedent basis check (LLM-only)",
+        "X_AI_KEY not set, skipping antecedent basis check (LLM-only)",
       );
       return [];
     }
@@ -185,4 +187,4 @@ export async function checkAntecedentBasisSafe(
   }
 }
 
-export { MODEL_VERSION, PROMPT_VERSION };
+export { PROMPT_VERSION };
